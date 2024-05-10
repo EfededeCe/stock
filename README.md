@@ -130,3 +130,66 @@ from decouple import config`
 Agregar a la lista del archivo `.gitignore` los archivos que no sean código de la aplicación o cache, como el entorno virtual creado (venv o .venv o .venvlnx etc...)
 
 ## Más [configuraciones](https://dev.to/iamjonathanpumares/configura-tu-entorno-de-desarrollo-de-manera-profesional-con-python-y-django-335g) generales
+
+# Crear una "Aplicación" dentro del proyecto
+
+Todo lo hecho hasta ahora son configuraciones generales, pera empezar a crear vistas o funciones que operen con la base de datos se pueden ir creando distintas aplicaciones, en este caso la app `inventory`:
+
+```sh
+python manage.py startapp inventory
+```
+
+Y se agrega a la sección INSTALLED_APPS en `settings.py`
+
+```py
+INSTALLED_APPS = [
+    # ...
+    'rest_framework', # DRF
+    "corsheaders", # CORS middleware
+    "inventory", # App creada
+]
+```
+
+# Base de Datos, Modelos y Tablas
+
+[ManyToMany Django models](https://docs.djangoproject.com/en/5.0/topics/db/examples/many_to_many/)
+
+```py
+class Proveedor(models.Model):
+  nombre = models.CharField(max_length=250)
+  url = models.CharField(max_length=250)
+
+  def __str__(self):
+      return self.nombre
+
+class Producto(models.Model):
+  descripcion = models.CharField(max_length=250)
+  nombre = models.CharField(max_length=100)
+  modelo = models.CharField(max_length=100)
+  marca = models.CharField(max_length=100)
+
+  def __str__(self):
+      return "{0} / {1} / {2}".format(self.nombre, self.modelo, self.marca)
+
+class Lote(models.Model):
+  codigo_barra = models.CharField(max_length=100)
+  fecha = models.DateTimeField(default=timezone.now)
+  precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
+  ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2)
+  proveedor  = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
+  cantidad  = models.IntegerField()
+  precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
+
+  def __str__(self):
+      return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
+
+```
+
+## Migraciones
+
+Para poblar la base de datos hay que ejecutar los comandos `python manage.py makemigrations` y `python manage.py migrate` ó para espesificar una sóla aplicación para hacer las migraciones `python manage.py makemigrations inventory` y `python manage.py migrate inventory`.
+El primer comando genera la carpeta `/migrations` (`/inventory/migrations`) y va a contener las distintas migraciones a lo largo del tiempo, si se realizan cambios en la estructura de la base de datos, ahí se pasa a un código python intermedio al lenguaje de BD. El segundo, crea las tablas de la base de datos en la base que se le indicó en `/settings.py`.
+
+## Crear un super usuario de administración
+
+El comando `python manage.py createsuperuser` crea un super usuario para poder gestioinar la base de datos desde el administrador de django. Después de crear el super usuario, levantar el servidor con `python manage.py runserver` e ir a `http://127.0.0.1:8000/admin` ingresar con el usuario y contraseña dados.
