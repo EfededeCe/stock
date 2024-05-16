@@ -193,3 +193,25 @@ El primer comando genera la carpeta `/migrations` (`/inventory/migrations`) y va
 ## Crear un super usuario de administración
 
 El comando `python manage.py createsuperuser` crea un super usuario para poder gestioinar la base de datos desde el administrador de django. Después de crear el super usuario, levantar el servidor con `python manage.py runserver` e ir a `http://127.0.0.1:8000/admin` ingresar con el usuario y contraseña dados.
+
+# [Django Rest Framework](https://www.django-rest-framework.org/tutorial/quickstart/)
+
+Con DRF ya instalado e integrado como aplicación en `INSTALLED_APPS`, se pueden enviar `json`s como respuesta a una petición http, que represente los distintos modelos de la BD de forma automática y también da la posibilidad de realizar `CRUD`s.
+
+## [Serializers](https://www.django-rest-framework.org/api-guide/serializers/#serializers)
+
+Los `serializers` se usan para serializar, transformar los objetos que vienen de la petición a la BD (como QuerySets), devolviendo un formato apto para el envío como `JSON`.
+Para esto hay que crear un archivo para definir los `serializers` de cada modelo, dentro de la carpeta de la aplicación que tiene estos modelos, en este caso `serializers.py`:
+
+**/inventory/serializers.py**
+
+```py
+class ProveedorSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Proveedor
+    fields = '__all__'  # serializa todos los campos de la tabla
+```
+
+## Vistas => datos devueltos por serializers
+
+
