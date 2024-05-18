@@ -9,6 +9,7 @@ class Proveedor(models.Model):
   
   def __str__(self):
       return self.nombre
+
 class Lote(models.Model):
   codigo_barra = models.CharField(max_length=100)
   fecha = models.DateTimeField(default=timezone.now)
@@ -29,4 +30,13 @@ class Producto(models.Model):
   lote= models.ForeignKey(Lote,on_delete=models.CASCADE)
   def __str__(self):
       return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
-  
+
+class Venta(models.Model):
+         usuario = models.CharField(max_length=40)
+         fecha = models.DateTimeField(default=timezone.now)
+         precio_de_venta_Total = models.DecimalField(max_digits=12, decimal_places=2)
+         productos = models.ManyToManyField(Producto)
+         class Meta: 
+              ordering=["fecha"]
+def _str_(self):
+            return "{0}/{1}/{2}/{3}".format(self.usuario,self.fecha, self.productos,self.precio_de_venta_total)
