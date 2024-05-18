@@ -76,7 +76,7 @@ MIDDLEWARE = [
 ```
 
 ```py
-# Agregado para usar con la biblioteca django-cors-headers
+# Agregado para usar con la biblioteca django-cors-headers, http://127.0.0.1:5500/src/TarrabeFront.html (agus)
 CORS_ALLOWED_ORIGINS = [...]
 ```
 

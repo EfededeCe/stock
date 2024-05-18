@@ -1,5 +1,4 @@
-# coding: utf-8
-from decouple import config
+# coding: utf-8·from decouple import config
 """
 Django settings for stock_api project.
 
@@ -47,7 +46,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    "corsheaders.middleware.CorsMiddleware", # Agregado para el funcionamiento de CORS
+    'corsheaders.middleware.CorsMiddleware',
+      # Agregado para el funcionamiento de CORS
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -82,11 +82,11 @@ WSGI_APPLICATION = 'stock_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', cast=int),
+        'NAME': 'tarrabe',
+        'USER':'root',
+        'PASSWORD': 'root',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 

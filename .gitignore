@@ -1,4 +1,5 @@
 .env
+tutorial-env
 .venv
 .venvlnx
 .mypy_cache/
