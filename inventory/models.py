@@ -14,7 +14,7 @@ class Lote(models.Model):
   codigo_barra = models.CharField(max_length=100)
   fecha = models.DateTimeField(default=timezone.now)
   precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
-  ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2)
+  ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2, null=True)
   proveedor  = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
   cantidad  = models.IntegerField()
   precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
@@ -27,16 +27,24 @@ class Producto(models.Model):
   codigo_del_local = models.CharField(max_length=100)
   modelo = models.CharField(max_length=100)
   marca = models.CharField(max_length=100)
-  lote= models.ForeignKey(Lote,on_delete=models.CASCADE)
+  lote= models.ForeignKey(Lote,on_delete=models.CASCADE, null=True)
   def __str__(self):
       return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
 
+
+     
 class Venta(models.Model):
          usuario = models.CharField(max_length=40)
          fecha = models.DateTimeField(default=timezone.now)
          precio_de_venta_Total = models.DecimalField(max_digits=12, decimal_places=2)
-         productos = models.ManyToManyField(Producto)
+         productosLote = models.ManyToManyField(Lote, through="Tabla_intermedia_venta")
          class Meta: 
               ordering=["fecha"]
-def _str_(self):
-            return "{0}/{1}/{2}/{3}".format(self.usuario,self.fecha, self.productos,self.precio_de_venta_total)
+         def _str_(self):
+            return "{0}/{1}/{2}/{3}".format(self.usuario,self.fecha, self.productosLote,self.precio_de_venta_total)
+
+
+class Tabla_intermedia_venta(models.Model):
+     venta = models.ForeignKey(Venta,on_delete=models.CASCADE)
+     producto= models.ForeignKey(Lote,on_delete=models.CASCADE)
+     cantidad=models.IntegerField(null=True)

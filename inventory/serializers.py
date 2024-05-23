@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from .models import Proveedor, Producto, Lote
-
+from .models import Proveedor, Producto, Lote , Tabla_intermedia_venta,Venta
 class ProveedorSerializer(serializers.ModelSerializer):
   class Meta:
     model = Proveedor
@@ -20,3 +19,12 @@ class LoteSerializer(serializers.ModelSerializer):
     # fields = ('id', 'codigo_barra', 'precio_de_compra', 'cantidad')
 
 
+class Tabla_intermedia_ventaSerializer (serializers.ModelSerializer) :
+  class Meta: 
+    model=Tabla_intermedia_venta
+    fields = '__all__' 
+
+class VentaSerializer(serializers.ModelSerializer): 
+  class Meta :
+    model:Venta
+    fields = '__all__' 
