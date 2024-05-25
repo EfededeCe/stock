@@ -7,4 +7,4 @@ tutorial-env
 *.sql
 __pycache__
 migrations
-desktop
+desktop.ini
