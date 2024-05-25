@@ -6,6 +6,5 @@ tutorial-env
 .vscode/*
 *.sql
 __pycache__
-db.sqlite3
 migrations
-tutorial-env
+desktop
