@@ -80,13 +80,14 @@ WSGI_APPLICATION = 'stock_api.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
+    'default':
+      {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': "tarrastock",
-        'USER': "root",
-        'PASSWORD': "root",
-        'HOST':"127.0.0.1",
-        'PORT':"3307",
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASSWORD'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT',cast=int),
     }
 }
 
