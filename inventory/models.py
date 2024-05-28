@@ -17,7 +17,7 @@ class Lote(models.Model):
   precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
   ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2, null=True)
   proveedor  = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-  cantidad  = models.IntegerField(validators=[MinValueValidator(0)])
+  cantidad  = models.IntegerField(validators=[MinValueValidator(0)],null=False)
   precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
   
   def __str__(self):
@@ -46,6 +46,7 @@ class Venta(models.Model):
 
 
 class Tabla_intermedia_venta(models.Model):
+     cantidad = models.IntegerField()
      venta = models.ForeignKey(Venta,on_delete=models.CASCADE)
      producto= models.ForeignKey(Lote,on_delete=models.CASCADE)
-     cantidad=models.IntegerField(null=True)
+   
