@@ -1,11 +1,12 @@
 from django.db import models
 from django.utils import timezone
+from django.core.validators import  MinValueValidator
 
 # Create your models here.
 
 class Proveedor(models.Model):
-  nombre = models.CharField(max_length=250)
-  url = models.CharField(max_length=250)
+  nombre = models.CharField(max_length=250 , unique=True)
+  url = models.CharField(max_length=250,  unique=True)
   
   def __str__(self):
       return self.nombre
@@ -16,7 +17,7 @@ class Lote(models.Model):
   precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
   ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2, null=True)
   proveedor  = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-  cantidad  = models.IntegerField()
+  cantidad  = models.IntegerField(validators=[MinValueValidator(0)])
   precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
   
   def __str__(self):
