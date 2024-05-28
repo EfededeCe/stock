@@ -26,5 +26,5 @@ class Tabla_intermedia_ventaSerializer (serializers.ModelSerializer) :
 
 class VentaSerializer(serializers.ModelSerializer): 
   class Meta :
-    model:Venta
+    model= Venta
     fields = '__all__' 
