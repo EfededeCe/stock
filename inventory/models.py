@@ -15,10 +15,12 @@ class Lote(models.Model):
   codigo_barra = models.CharField(max_length=100)
   fecha = models.DateTimeField(default=timezone.now)
   precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
+  precio_bonificado = models.DecimalField(max_digits=12, decimal_places=2, null=True)
   ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2, null=True)
   proveedor  = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
   cantidad  = models.IntegerField(validators=[MinValueValidator(0)],null=False)
   precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
+  iva = models.DecimalField(max_digits=12, decimal_places=2,null=False)
   
   def __str__(self):
       return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
