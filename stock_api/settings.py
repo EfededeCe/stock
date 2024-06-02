@@ -33,6 +33,7 @@ ALLOWED_HOSTS = [
   'http://127.0.0.1:5500',
   'http://127.0.0.1:8000',
   'stock-xo5p.onrender.com',
+  'https://fronttarrabe.onrender.com/',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
