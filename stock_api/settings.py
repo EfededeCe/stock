@@ -155,5 +155,6 @@ CORS_ALLOWED_ORIGINS = [
   "http://127.0.0.1",
   "https://fronttarrabe.onrender.com",
   "http://127.0.0.1:8000",
-  "181.20.23.127:0",
+  "http://181.20.23.127:0",
+  "https://181.20.23.127:0",
 ]
