@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework', # DRF
-    "corsheaders", # CORS middleware
-    "inventory",
+    'corsheaders', # CORS middleware
+    'django_filters',
+    'inventory',
 ]
 
 MIDDLEWARE = [
@@ -147,9 +148,15 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+# Setear globalmente los filtros de DRF
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
+
+
+
 # Agregado para usar con la biblioteca django-cors-headers
-
-
 CORS_ALLOWED_ORIGINS = [
   "http://127.0.0.1:5500",
   "http://127.0.0.1",
