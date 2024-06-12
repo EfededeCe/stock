@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ryef/settings/
 """
 from decouple import config
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,13 +22,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%g=%uk5x4mtwgfi9@r^w-ucc(3a#6(1%fw5)dd5zseiiuz&xqf'
+SECRET_KEY = config('SECRET_KEY', cast=str)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = [
   '127.0.0.1',
+  'localhost',
+  '.dattaweb.com',
+  'stk.dattaweb.com',
   '127.0.0.1:5500',
   'localhost:5500',
   'http://127.0.0.1:5500',
@@ -142,6 +146,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
