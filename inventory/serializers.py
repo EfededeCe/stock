@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Proveedor, Producto, Lote , Tabla_intermedia_venta,Venta
+
 class ProveedorSerializer(serializers.ModelSerializer):
   class Meta:
     model = Proveedor
@@ -28,3 +29,31 @@ class VentaSerializer(serializers.ModelSerializer):
   class Meta :
     model= Venta
     fields = '__all__' 
+
+
+
+class LoteProveedorSerializer(serializers.ModelSerializer):
+  proveedor = ProveedorSerializer()
+
+  class Meta:
+    model = Lote
+    fields = '__all__'
+  
+
+class ProductoLoteProveedorSerializer(serializers.ModelSerializer):
+  lote = LoteProveedorSerializer()
+
+  class Meta:
+    model = Producto
+    fields = '__all__'
+  
+  # def to_representation(self, instance):
+    
+  #   return {
+  #     "id": instance.id,
+  #     "descripcion": instance.descripcion,
+  #     "codigo_del_local": instance.codigo_del_local,
+  #     "modelo": instance.modelo,
+  #     "marca": instance.marca,
+  #     "lote_cod_barra": instance.lote.fecha if instance.lote != '' else ''
+  #   }
