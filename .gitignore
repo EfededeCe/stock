@@ -1,4 +1,6 @@
 .env
+.env.dev
+.env.prod
 tutorial-env
 .venv
 .venvlnx

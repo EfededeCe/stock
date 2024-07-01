@@ -1,3 +1,6 @@
 .venvlnx
+.env
+.env.dev
+.env.prod
 fake_base_de_datos.sql
 db.sqlite

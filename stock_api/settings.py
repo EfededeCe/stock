@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ryef/settings/
 """
-from decouple import config
 from pathlib import Path
 import os
 
@@ -22,27 +21,17 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', cast=str)
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = os.environ.get('DEBUG', default=0)
 
-ALLOWED_HOSTS = [
-  '127.0.0.1',
-  'localhost',
-  '.dattaweb.com',
-  'stk.dattaweb.com',
-  '127.0.0.1:5500',
-  'localhost:5500',
-  'http://127.0.0.1:5500',
-  'http://127.0.0.1:8000',
-  'stock-xo5p.onrender.com',
-  'https://fronttarrabe.onrender.com/',
-]
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
 CSRF_TRUSTED_ORIGINS = [
-  'http://127.0.0.1',
-  
+    'http://127.0.0.1',
+    'http://127.0.0.1:1337',
+
 ]
 # Application definition
 
@@ -53,8 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework', # DRF
-    'corsheaders', # CORS middleware
+    'rest_framework',  # DRF
+    'corsheaders',  # CORS middleware
     'django_filters',
     'inventory',
 ]
@@ -63,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-      # Agregado para el funcionamiento de CORS
+    # Agregado para el funcionamiento de CORS
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -97,14 +86,14 @@ WSGI_APPLICATION = 'stock_api.wsgi.application'
 
 DATABASES = {
     'default':
-      {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT',cast=int),
-          'OPTIONS': {
+    {
+        'ENGINE': os.environ.get('DB_ENGINE', "django.db.backends.sqlite3"),
+        'NAME': os.environ.get('DB_NAME', BASE_DIR / "db.sqlite3"),
+        'USER': os.environ.get('DB_USER', "user"),
+        'PASSWORD': os.environ.get('DB_PASSWORD', "password"),
+        'HOST': os.environ.get('DB_HOST', "localhost"),
+        'PORT': os.environ.get('DB_PORT', "3306"),
+        'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION'"
         },
     }
@@ -160,16 +149,15 @@ REST_FRAMEWORK = {
 }
 
 
-
 # Agregado para usar con la biblioteca django-cors-headers
 CORS_ALLOWED_ORIGINS = [
-  "http://127.0.0.1:5500",
-  "http://127.0.0.1",
-  "https://fronttarrabe.onrender.com",
-  "http://127.0.0.1:8000",
-  "http://181.20.23.127:0",
-  "https://181.20.23.127:0",
-  "http://181.166.206.193:0",
-  "https://181.166.206.193:0",
+    "http://127.0.0.1:5500",
+    "http://127.0.0.1",
+    "https://fronttarrabe.onrender.com",
+    "http://127.0.0.1:8000",
+    "http://181.20.23.127:0",
+    "https://181.20.23.127:0",
+    "http://181.166.206.193:0",
+    "https://181.166.206.193:0",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
