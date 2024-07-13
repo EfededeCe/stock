@@ -3,7 +3,7 @@ from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
-## SERIALIZERS ##
+# SERIALIZERS
 from .serializers.general_serializer import Tabla_intermedia_ventaSerializer, ProductoLoteProveedorSerializer
 from .serializers.lote_serializer import LoteSerializer
 from .serializers.producto_serializers import ProductoSerializer
