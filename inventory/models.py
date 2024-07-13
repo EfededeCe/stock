@@ -13,6 +13,16 @@ class Proveedor(models.Model):
         return self.nombre
 
 
+class Producto(models.Model):
+    descripcion = models.CharField(max_length=250)
+    codigo_del_local = models.CharField(max_length=100)
+    modelo = models.CharField(max_length=100)
+    marca = models.CharField(max_length=100)
+
+    def __str__(self):
+        return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
+
+
 class Lote(models.Model):
     codigo_barra = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=timezone.now)
@@ -26,20 +36,11 @@ class Lote(models.Model):
         validators=[MinValueValidator(0)], null=False)
     precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
     iva = models.DecimalField(max_digits=12, decimal_places=2, null=True)
+    producto = models.ForeignKey(
+        Producto, on_delete=models.CASCADE, default='0')
 
     def __str__(self):
         return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
-
-
-class Producto(models.Model):
-    descripcion = models.CharField(max_length=250)
-    codigo_del_local = models.CharField(max_length=100)
-    modelo = models.CharField(max_length=100)
-    marca = models.CharField(max_length=100)
-    lote = models.ForeignKey(Lote, on_delete=models.CASCADE, null=True)
-
-    def __str__(self):
-        return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
 
 
 class Venta(models.Model):

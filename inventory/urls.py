@@ -6,6 +6,8 @@ router = routers.DefaultRouter()
 router.register(r'plp', views.ProductoLoteProveedorView,
                 'productos_lote_proveedor')
 router.register(r'productos', views.ProductoView, 'productos')
+router.register(r'productos-id-desc',
+                views.ProductoIDDescView, 'productosIDDesc')
 router.register(r'proveedores', views.ProveedorView, 'proveedores')
 router.register(r'lotes', views.LoteView, 'lotes')
 router.register(r'ventas', views.VentaView, 'ventas')

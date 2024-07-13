@@ -1,8 +1,16 @@
 # from rest_framework import DjangoFilterBackend, FilterSet
 from django.shortcuts import render
 from rest_framework import viewsets
-from .serializers import ProductoSerializer, ProveedorSerializer, LoteSerializer, VentaSerializer, Tabla_intermedia_ventaSerializer, ProductoLoteProveedorSerializer
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
+
+## SERIALIZERS ##
+from .serializers.general_serializer import Tabla_intermedia_ventaSerializer, ProductoLoteProveedorSerializer
+from .serializers.lote_serializer import LoteSerializer
+from .serializers.producto_serializers import ProductoSerializer
+from .serializers.proveedor_serializer import ProveedorSerializer
+from .serializers.venta_serializer import VentaSerializer
+from .serializers.producto_serializers import ProductoIDDescSerializer
+
 # Create your views here.
 
 # class ProductoFilter(FilterSet):
@@ -24,6 +32,11 @@ class ProductoView(viewsets.ModelViewSet):
     queryset = Producto.objects.all()
     # filter_backends = (DjangoFilterBackend,)
     # filterset_class = ProductoFilter
+
+
+class ProductoIDDescView(viewsets.ModelViewSet):
+    serializer_class = ProductoIDDescSerializer
+    queryset = Producto.objects.all()
 
 
 class LoteView(viewsets.ModelViewSet):
