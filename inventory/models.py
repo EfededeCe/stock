@@ -15,7 +15,7 @@ class Proveedor(models.Model):
 
 class Producto(models.Model):
     descripcion = models.CharField(max_length=250)
-    codigo_del_local = models.CharField(max_length=100)
+    codigo_del_local = models.CharField(max_length=100, unique=True)
     modelo = models.CharField(max_length=100)
     marca = models.CharField(max_length=100)
 

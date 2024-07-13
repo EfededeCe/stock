@@ -6,10 +6,9 @@ from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 # SERIALIZERS
 from .serializers.general_serializer import Tabla_intermedia_ventaSerializer, ProductoLoteProveedorSerializer
 from .serializers.lote_serializer import LoteSerializer
-from .serializers.producto_serializers import ProductoSerializer
-from .serializers.proveedor_serializer import ProveedorSerializer
+from .serializers.producto_serializers import ProductoSerializer, ProductoIDDescSerializer, ProductoIDCodigoSerializer
+from .serializers.proveedor_serializer import ProveedorSerializer, ProveedorIDNombreSerializer, ProveedorIDUrlSerializer
 from .serializers.venta_serializer import VentaSerializer
-from .serializers.producto_serializers import ProductoIDDescSerializer
 
 # Create your views here.
 
@@ -27,15 +26,28 @@ class ProveedorView(viewsets.ModelViewSet):
     queryset = Proveedor.objects.all()
 
 
+class ProveedorIDNombreView(viewsets.ModelViewSet):
+    serializer_class = ProveedorIDNombreSerializer
+    queryset = Proveedor.objects.all()
+
+
+class ProveedorIDUrlView(viewsets.ModelViewSet):
+    serializer_class = ProveedorIDUrlSerializer
+    queryset = Proveedor.objects.all()
+
+
 class ProductoView(viewsets.ModelViewSet):
     serializer_class = ProductoSerializer
     queryset = Producto.objects.all()
-    # filter_backends = (DjangoFilterBackend,)
-    # filterset_class = ProductoFilter
 
 
 class ProductoIDDescView(viewsets.ModelViewSet):
     serializer_class = ProductoIDDescSerializer
+    queryset = Producto.objects.all()
+
+
+class ProductoIDCodigoView(viewsets.ModelViewSet):
+    serializer_class = ProductoIDCodigoSerializer
     queryset = Producto.objects.all()
 
 
