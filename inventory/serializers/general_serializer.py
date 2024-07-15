@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ..models import Proveedor, Producto, Lote, Tabla_intermedia_venta, Venta
 from .proveedor_serializer import ProveedorSerializer
+from .lote_serializer import LoteSerializer, LoteProveedorSerializer
 
 
 class Tabla_intermedia_ventaSerializer (serializers.ModelSerializer):
@@ -11,32 +12,22 @@ class Tabla_intermedia_ventaSerializer (serializers.ModelSerializer):
         fields = '__all__'
 
 
-class LoteProveedorSerializer(serializers.ModelSerializer):
-    proveedor = ProveedorSerializer()
-
-    class Meta:
-        model = Lote
-        fields = '__all__'
-
-
 class ProductoLoteProveedorSerializer(serializers.ModelSerializer):
-    # lote = Lote.objects.filter(producto__id=producto.id)
-    # LoteProveedorSerializer(many=True)
+
+    lote = serializers.SerializerMethodField()
 
     class Meta:
         model = Producto
-        fields = '__all__'
+        fields = ('id', 'descripcion', 'codigo_del_local',
+                  'modelo', 'marca', 'lote')
+        depth = 2
 
-    def to_representation(self, instance):
-
-        queryset_values = Lote.objects.filter(
-            producto__id=instance.id).values()
-
-        return {
-            'id': instance.id,
-            'descripcion': instance.descripcion,
-            'codigo_del_local': instance.codigo_del_local,
-            'modelo': instance.modelo,
-            'marca': instance.marca,
-            'lotes': queryset_values
-        }
+    def get_lote(self, obj):
+        # Aquí debes definir cómo obtener el lote para un producto.
+        # Este es solo un ejemplo, debes ajustarlo a tu modelo y lógica.
+        # Supongo que tienes una relación entre Producto y Lote que debes definir en tu modelo.
+        try:
+            lote = Lote.objects.get(producto=obj)
+            return LoteProveedorSerializer(lote).data
+        except Lote.DoesNotExist:
+            return None
