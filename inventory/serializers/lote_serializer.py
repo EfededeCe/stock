@@ -6,7 +6,6 @@ class LoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lote
         fields = '__all__'
-        depth = 1
 
 
 class LoteProveedorSerializer(serializers.ModelSerializer):
