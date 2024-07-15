@@ -27,7 +27,7 @@ class ProductoLoteProveedorSerializer(serializers.ModelSerializer):
         # Este es solo un ejemplo, debes ajustarlo a tu modelo y lógica.
         # Supongo que tienes una relación entre Producto y Lote que debes definir en tu modelo.
         try:
-            lote = Lote.objects.get(producto=obj)
-            return LoteProveedorSerializer(lote).data
+            lotes = Lote.objects.filter(producto=obj)
+            return LoteProveedorSerializer(lotes, many=True).data
         except Lote.DoesNotExist:
             return None
