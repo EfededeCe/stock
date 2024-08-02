@@ -9,7 +9,9 @@ class Tabla_intermedia_ventaSerializer (serializers.ModelSerializer):
 
     class Meta:
         model = Tabla_intermedia_venta
-        fields = '__all__'
+        # fields = '__all__'
+        exclude = ['lote']
+        depth = 4
 
 
 class ProductoLoteProveedorSerializer(serializers.ModelSerializer):

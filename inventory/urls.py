@@ -21,6 +21,8 @@ router.register(r'proveedores-id-url',
 router.register(r'lotes', views.LoteView, 'lotes')
 
 router.register(r'ventas', views.VentaView, 'ventas')
+router.register(r'vpost', views.VentaViewSet, 'venta post')
+
 router.register(r'tabla_intermedia_venta',
                 views.Tabla_intermedia_ventaView, 'tabla_intermedia_venta')
 

@@ -1,6 +1,9 @@
 from rest_framework import serializers
 from ..models import Producto
 
+# Ver productos que si se repite codigo de local y descripción
+# sólo lo admita con un modelo distinto
+
 
 class ProductoSerializer(serializers.ModelSerializer):
 

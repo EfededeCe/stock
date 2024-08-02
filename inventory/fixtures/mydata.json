@@ -115,6 +115,15 @@
     }
   },
   {
+    "pk": 2,
+    "model": "inventory.venta",
+    "fields": {
+      "usuario": "Empleado 3",
+      "fecha": "2024-07-08T09:45:32.486112Z",
+      "precio_de_venta_Total": 25000.0
+    }
+  },
+  {
     "pk": 1,
     "model": "inventory.tabla_intermedia_venta",
     "fields": {
@@ -130,6 +139,24 @@
       "cantidad": 2,
       "venta": 1,
       "lote": 2
+    }
+  },
+  {
+    "pk": 3,
+    "model": "inventory.tabla_intermedia_venta",
+    "fields": {
+      "cantidad": 1,
+      "venta": 2,
+      "lote": 2
+    }
+  },
+  {
+    "pk": 4,
+    "model": "inventory.tabla_intermedia_venta",
+    "fields": {
+      "cantidad": 5,
+      "venta": 2,
+      "lote": 1
     }
   }
 ]

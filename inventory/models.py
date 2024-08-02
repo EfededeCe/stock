@@ -44,11 +44,11 @@ class Lote(models.Model):
 
 
 class Venta(models.Model):
-    usuario = models.CharField(max_length=40)
+    usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_venta_Total = models.DecimalField(
         max_digits=12, decimal_places=2)
-    productosLote = models.ManyToManyField(
+    lotes = models.ManyToManyField(
         Lote, through="Tabla_intermedia_venta")
 
     class Meta:
@@ -61,4 +61,4 @@ class Venta(models.Model):
 class Tabla_intermedia_venta(models.Model):
     cantidad = models.IntegerField(default=0)
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
-    producto = models.ForeignKey(Lote, on_delete=models.CASCADE)
+    lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
