@@ -26,15 +26,17 @@ class Producto(models.Model):
 class Lote(models.Model):
     codigo_barra = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=timezone.now)
-    precio_de_compra = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_de_compra = models.DecimalField(
+        max_digits=12, validators=[MinValueValidator(0)], decimal_places=2)
     precio_bonificado = models.DecimalField(
-        max_digits=12, decimal_places=2, null=True)
+        max_digits=12, validators=[MinValueValidator(0)], decimal_places=2, null=True)
     ultimo_precio = models.DecimalField(
         max_digits=12, decimal_places=2, null=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     cantidad = models.IntegerField(
         validators=[MinValueValidator(0)], null=False)
-    precio_de_venta = models.DecimalField(max_digits=12, decimal_places=2)
+    precio_de_venta = models.DecimalField(
+        max_digits=12, validators=[MinValueValidator(0)], decimal_places=2)
     iva = models.DecimalField(max_digits=12, decimal_places=2, null=True)
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, default='0')
@@ -47,7 +49,7 @@ class Venta(models.Model):
     usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_venta_Total = models.DecimalField(
-        max_digits=12, decimal_places=2)
+        max_digits=12, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
     lotes = models.ManyToManyField(
         Lote, through="Tabla_intermedia_venta")
 

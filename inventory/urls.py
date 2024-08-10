@@ -25,7 +25,16 @@ router.register(r'vpost', views.VentaViewSet, 'venta post')
 
 router.register(r'tabla_intermedia_venta',
                 views.Tabla_intermedia_ventaView, 'tabla_intermedia_venta')
+router.register(r'inter',
+                views.IntermediaViewSet, 'tb_intermedia')
+
+router.register(r'v',
+                views.TalonarioViewSet, 'get_talonario')
+
+router.register(r've',
+                views.VentaPostViewSet, 'post_venta')
 
 urlpatterns = [
+    path('api/v1/view', views.VentaPostAPIView.as_view(), name='api_view'),
     path('api/v1/', include(router.urls))
 ]
