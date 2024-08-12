@@ -33,7 +33,7 @@ class Lote(models.Model):
     ultimo_precio = models.DecimalField(
         max_digits=12, decimal_places=2, null=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
-    cantidad = models.IntegerField(
+    cantidad = models.PositiveIntegerField(
         validators=[MinValueValidator(0)], null=False)
     precio_de_venta = models.DecimalField(
         max_digits=12, validators=[MinValueValidator(0)], decimal_places=2)
@@ -71,6 +71,6 @@ class Venta(models.Model):
 
 
 class Tabla_intermedia_venta(models.Model):
-    cantidad = models.IntegerField(default=0)
+    cantidad = models.PositiveIntegerField(default=0)
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
