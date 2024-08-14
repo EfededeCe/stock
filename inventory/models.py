@@ -41,6 +41,16 @@ class Lote(models.Model):
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, default='0')
 
+    def restar_cantidad(self, cantidad):
+        """Reduce la cantidad disponible del lote."""
+        if cantidad <= 0:
+            raise ValueError("La cantidad debe ser positiva")
+        if cantidad > self.cantidad:
+            raise ValueError("La cantidad a restar no puede ser mayor a la cantidad disponible")
+        
+        self.cantidad -= cantidad
+        self.save()
+        
     def __str__(self):
         return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
 

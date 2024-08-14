@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from ..models import Venta, Lote, Tabla_intermedia_venta
 from ..serializers.lote_serializer import LoteProveedorSerializer
+from django.db import transaction
 
 class ProductoVentaSerializer(serializers.ModelSerializer):
     codigo_de_barra = serializers.CharField(source='producto.codigo_barra')
@@ -33,8 +34,6 @@ class TablaIntermediaVentaSerializer(serializers.ModelSerializer):
   
     class Meta:
         model = Tabla_intermedia_venta
-        # fields = ['cantidad', 'producto_id',
-        #           'codigo_del_local', 'venta_id', 'lote_id']
         fields = ['cantidad', 'venta_id', 'lote_id']
 
    
@@ -42,34 +41,14 @@ class TablaIntermediaVentaSerializer(serializers.ModelSerializer):
 
 class VentaSerializer(serializers.ModelSerializer):
     
-    # TODO: validar que en la venta se traiga al menos un producto con cantidad asociada > 0.
+    # TODO: validar que en la venta se traiga al menos un producto con cantidad asociada > 0. crear error para no  
 
-    # TODO: Devolver JSON con los datos de la venta:
+    # TODO: Devolver JSON con los datos de la venta: 
 
     # TODO: Agregar validación antes de guardar, si existe el lote de producto requerido
 
     # TODO: Hacer el calculo del iva y el precio en backend
 
-    # {
-    #   "usuario": "Empleado 1",
-    #   "venta": 2,
-    #   "fecha": "30/07/2024",
-    #   "precio_total": 245000.00,
-    #   "productos": [
-    #     {
-    #       "cantidad": "4",
-    #       "codigo_de_barra": "43252",
-    #       "descripcion": "Freno de cangoo",
-    #       "precio_de_venta": "48000.00"
-    #     },
-    #     {
-    #       "cantidad": "2",
-    #       "codigo_de_barra": "542342",
-    #       "descripcion": "Freno de citroen 13V 3",
-    #       "precio_de_venta": "210000.00"
-    #     }
-    #   ]
-    # }
     lotes = serializers.SerializerMethodField()
 
     class Meta:
@@ -94,22 +73,7 @@ class VentaSerializer(serializers.ModelSerializer):
         except Lote.DoesNotExist:
             return None
 
-    # def create(self, validated_data):
-    #     productos_data = validated_data.pop('productosLote')
-    #     venta = Venta.objects.create(**validated_data)
-    #     for producto_data in productos_data:
-    #         producto_id = producto_data.get('producto_id')
-    #         codigo_del_local = producto_data.get('codigo_del_local')
-    #         if producto_id:
-    #             lote = Lote.objects.get(id=producto_id)
-    #         elif codigo_del_local:
-    #             lote = Lote.objects.get(codigo_del_local=codigo_del_local)
-    #         else:
-    #             continue
-    #         Tabla_intermedia_venta.objects.create(
-    #             venta=venta, producto=lote, cantidad=producto_data['cantidad'])
-    #     return venta
-
+    @transaction.atomic
     def create(self, validated_data):
         productos_data = validated_data.pop('productosLote')
         venta = Venta.objects.create(**validated_data)
@@ -122,53 +86,18 @@ class VentaSerializer(serializers.ModelSerializer):
                 lote = Lote.objects.get(id=lote_id)
                 Tabla_intermedia_venta.objects.create(
                     venta=venta, lote=lote, cantidad=cantidad)
+                lote.restar_cantidad(cantidad)
         return venta
 
-# class ImpresionTalonarioSerializer(serializers.Serializer):
-#     email = serializers.EmailField()
-
-
-#     def validate_name(self, value):
-#         # print(self.context)
-#         print(value)
-#         if 'developer' in value:
-#             raise serializers.ValidationError('Error, no puede existir un usuario con ese nombre')
-#         return value
-
-#     def validate_email(self, value):
-#         print(value)
-#         if  value == '':
-#             raise serializers.ValidationError('Tiene que indicar un correo')
-#         # if self.context['name'] in value:
-#         #   raise serializers.ValidationError('No puede el email contener el nombre')
-#         return value
-
-#     def validate(self, data):
-#         return data
-
-#     def create(self, validated_data):
-#         print(validated_data)
-#         return User.objects.create(**validated_data)
-
-#     def update(self, instance, validated_data):
-#         print(f"Instancia => {instance}")
-#         print(f"Datos validados => {validated_data}")
-#         instance.name = validated_data.get('name', instance.name)
-#         instance.email = validated_data.get('email', instance.email)
-#         instance.save()
-#         return instance
 
 
 class TbSerializer(serializers.ModelSerializer):
-    # producto_id = serializers.IntegerField(write_only=True, required=False)
-    # codigo_del_local = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = Tabla_intermedia_venta
-        # fields = ['cantidad', 'producto_id',
-        #           'codigo_del_local', 'venta_id', 'lote_id']
+       
         fields = ['cantidad',  'lote']
-        # depth = 2
+
 
 
 class PostVentaSerializer(serializers.Serializer):
@@ -179,9 +108,9 @@ class PostVentaSerializer(serializers.Serializer):
     def validate(self, data):
         return data
 
-    # TODO: Agregar @atomic_attributes
-    # TODO: Restar cantidad de lote
-
+    # TODO: Agregar @atomic_attributes x test
+    # TODO: Restar cantidad de lote x test
+    @transaction.atomic
     def create(self, validated_data):
 
         lotes_cantidades = validated_data['lote_cantidad']
@@ -220,6 +149,7 @@ class PostVentaSerializer(serializers.Serializer):
             print('cantidad ====> ', lote['cantidad'])
             Tabla_intermedia_venta.objects.create(
                 venta_id=venta.id, lote_id=lote['lote'].id, cantidad=lote['cantidad'])
+            lote.restar_cantidad(lote['cantidad'])
 
         # return User.objects.create(**validated_data)
         return validated_data
