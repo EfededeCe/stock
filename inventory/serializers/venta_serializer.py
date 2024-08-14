@@ -114,53 +114,61 @@ class PostVentaSerializer(serializers.Serializer):
 
     usuario = serializers.CharField(max_length=40, required=False)
     lote_cantidad = TbSerializer(many=True)
-    depth = 2
 
     def validate(self, data):
         return data
 
     # TODO: Agregar @atomic_attributes x test
     # TODO: Restar cantidad de lote x test
-    @transaction.atomic
+
     def create(self, validated_data):
+        with transaction.atomic():
+            lotes_cantidades = validated_data['lote_cantidad']
 
-        lotes_cantidades = validated_data['lote_cantidad']
+            print('====================================')
+            print('====================================')
+            print('PostVentaSerializer create')
+            print('====================================')
+            print('====================================')
 
-        print('====================================')
-        print('====================================')
-        print('PostVentaSerializer create')
-        print('====================================')
-        print('====================================')
+            precio_total = 0
 
-        precio_total = 0
+            print(lotes_cantidades)
+            print('====================================')
+            print('====================================')
+            print('PostVentaSerializer, for in ====>')
+            print('====================================')
+            print('====================================')
 
-        print(lotes_cantidades)
-        print('====================================')
-        print('====================================')
-        print('PostVentaSerializer, for in ====>')
-        print('====================================')
-        print('====================================')
+            for lote_cant in lotes_cantidades:
+                Lote.objects.select_for_update().get(id=lote_cant['lote'].id)
+                precio_total = precio_total + \
+                    float(lote_cant['lote'].precio_de_venta) * \
+                    float(lote_cant['cantidad'])
+                print('PRECIO TOTAL =====> ', precio_total)
+                # talonario['productos'].append(data_producto)
 
-        for lote_cant in lotes_cantidades:
+            print(validated_data)
+            venta = Venta.objects.create(
+                usuario=validated_data['usuario'], precio_de_venta_Total=precio_total)
+            print(venta)
 
-            precio_total = precio_total + \
-                float(lote_cant['lote'].precio_de_venta) * \
-                float(lote_cant['cantidad'])
-            print('PRECIO TOTAL =====> ', precio_total)
-            # talonario['productos'].append(data_producto)
+            # print(asd)
 
-        print(validated_data)
-        venta = Venta.objects.create(
-            usuario=validated_data['usuario'], precio_de_venta_Total=precio_total)
-        print(venta)
+            for lote in lotes_cantidades:
+                print('venta_id ====> ', venta.id)
+                print('lote_id  ====> ', lote['lote'].id)
+                print('cantidad ====> ', lote['cantidad'])
+                Tabla_intermedia_venta.objects.create(
+                    venta_id=venta.id, lote_id=lote['lote'].id, cantidad=lote['cantidad'])
+            try:
+                Lote.objects.get(id=lote['lote'].id).restar_cantidad(
+                    lote['cantidad'])
 
-        for lote in lotes_cantidades:
-            print('venta_id ====> ', venta.id)
-            print('lote_id  ====> ', lote['lote'].id)
-            print('cantidad ====> ', lote['cantidad'])
-            Tabla_intermedia_venta.objects.create(
-                venta_id=venta.id, lote_id=lote['lote'].id, cantidad=lote['cantidad'])
-            lote.restar_cantidad(lote['cantidad'])
+            except ValueError:
+                raise
 
-        # return User.objects.create(**validated_data)
+                # lote.restar_cantidad(lote['cantidad'])
+
+            # return User.objects.create(**validated_data)
         return validated_data

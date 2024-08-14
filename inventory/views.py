@@ -277,9 +277,13 @@ class VentaPostAPIView(generics.CreateAPIView):
         print(request.data)  # intercepta los datos
         if serializer.is_valid():
             # intercepta los datos
-            serializer.save()
-            print('serializer.data ======> ', serializer.data)
-            return Response({'message': 'Producto creado correctamente!', 'data':  serializer.data}, status=status.HTTP_201_CREATED)
+            try:
+                serializer.save()
+                print('serializer.data ======> ', serializer.data)
+                return Response({'message': 'Producto creado correctamente!', 'data':  serializer.data}, status=status.HTTP_201_CREATED)
+            except:
+                return Response({'error': 'No son válidas algunas cantidades de productos!'},
+                                status=status.HTTP_406_NOT_ACCEPTABLE)
         print('serializer.data no válido ======> ',
               serializer)  # intercepta los datos
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
