@@ -117,3 +117,7 @@
     #     }
     #   ]
     # }
+
+# Formato JSON sin trailing comma
+# https://stackoverflow.com/questions/62347538/json-parse-error-expecting-property-name-enclosed-in-double-quotes-line-11-co
+

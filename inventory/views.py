@@ -173,7 +173,7 @@ class IntermediaViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class TalonarioViewSet(viewsets.ViewSet):
+class TalonarioViewSet(viewsets.GenericViewSet):
 
     @action(detail=False, methods=['get'], url_path='(?P<venta_id>[^/.]+)')
     def buscar_por_venta(self, request, venta_id=None):

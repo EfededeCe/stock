@@ -3,6 +3,7 @@ from ..models import Venta, Lote, Tabla_intermedia_venta
 from ..serializers.lote_serializer import LoteProveedorSerializer
 from django.db import transaction
 
+
 class ProductoVentaSerializer(serializers.ModelSerializer):
     codigo_de_barra = serializers.CharField(source='producto.codigo_barra')
     descripcion = serializers.CharField(source='producto.producto.descripcion')
@@ -31,19 +32,17 @@ class VentaDetalleSerializer(serializers.ModelSerializer):
 
 
 class TablaIntermediaVentaSerializer(serializers.ModelSerializer):
-  
+
     class Meta:
         model = Tabla_intermedia_venta
         fields = ['cantidad', 'venta_id', 'lote_id']
 
-   
-
 
 class VentaSerializer(serializers.ModelSerializer):
-    
-    # TODO: validar que en la venta se traiga al menos un producto con cantidad asociada > 0. crear error para no  
 
-    # TODO: Devolver JSON con los datos de la venta: 
+    # TODO: validar que en la venta se traiga al menos un producto con cantidad asociada > 0. crear error para no
+
+    # TODO: Devolver JSON con los datos de la venta:
 
     # TODO: Agregar validación antes de guardar, si existe el lote de producto requerido
 
@@ -90,20 +89,32 @@ class VentaSerializer(serializers.ModelSerializer):
         return venta
 
 
-
 class TbSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Tabla_intermedia_venta
-       
-        fields = ['cantidad',  'lote']
 
+        fields = ['cantidad',  'lote']
 
 
 class PostVentaSerializer(serializers.Serializer):
 
+    """
+    Fromato del body de la petición POST
+
+    {
+        "usuario": "Fede",
+        "fecha": "",
+        "precio_de_venta_Total": 0.00,
+        "lote_cantidad":[{"lote": 1, "cantidad": 4},
+        {"lote": 2, "cantidad": 25}]
+
+    }
+    """
+
     usuario = serializers.CharField(max_length=40, required=False)
     lote_cantidad = TbSerializer(many=True)
+    depth = 2
 
     def validate(self, data):
         return data

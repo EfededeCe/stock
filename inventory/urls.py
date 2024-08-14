@@ -34,6 +34,9 @@ router.register(r'v',
 router.register(r've',
                 views.VentaPostViewSet, 'post_venta')
 
+router.register(r'view2',
+                views.VentaPostViewSet, 'post_venta_2')
+
 urlpatterns = [
     path('api/v1/view', views.VentaPostAPIView.as_view(), name='api_view'),
     path('api/v1/', include(router.urls))
