@@ -1,6 +1,5 @@
 # from rest_framework import DjangoFilterBackend, FilterSet
 from django.shortcuts import render
-from rest_framework import viewsets, generics
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
 # API views
@@ -9,12 +8,14 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import action
 
+from rest_framework import viewsets, generics
+
 # SERIALIZERS
 from .serializers.general_serializer import Tabla_intermedia_ventaSerializer, ProductoLoteProveedorSerializer
 from .serializers.lote_serializer import LoteSerializer
 from .serializers.producto_serializers import ProductoSerializer, ProductoIDDescSerializer, ProductoIDCodigoSerializer
 from .serializers.proveedor_serializer import ProveedorSerializer, ProveedorIDNombreSerializer, ProveedorIDUrlSerializer
-from .serializers.venta_serializer import VentaSerializer, VentaDetalleSerializer, TablaIntermediaVentaSerializer, PostVentaSerializer
+from .serializers.venta_serializer import VentaSerializer, VentaDetalleSerializer, TablaIntermediaVentaSerializer, PostVentaSerializer, Venta2Serializer
 
 # Create your views here.
 
@@ -288,3 +289,23 @@ class VentaPostAPIView(generics.CreateAPIView):
               serializer)  # intercepta los datos
         # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Detalle de una venta => productos, cantidades, precios, fecha, empleado, total
+# Sólo GET
+# Url => http://localhost:8000/drf-endpoints/api/v1/vget/  2/
+
+class VentaDetalleViewSet(viewsets.ReadOnlyModelViewSet):
+
+    serializer_class = Venta2Serializer
+    # queryset = Venta.objects.all()
+    queryset = Tabla_intermedia_venta.objects.all()
+
+    def retrieve(self, request, *args, **kwargs):
+        venta_id = kwargs.get('pk')
+        queryset = self.queryset.filter(venta_id=venta_id)
+        venta = Venta.objects.get(id=venta_id)
+        if queryset.exists():
+            serializer = self.get_serializer(queryset, many=True)
+            return Response({'venta_id': venta_id, 'vendedor': venta.usuario, 'fecha': venta.fecha, 'venta': serializer.data}, status=status.HTTP_200_OK)
+        return Response({"detail": "No se encontraron registros para el venta_id dado."}, status=status.HTTP_404_NOT_FOUND)

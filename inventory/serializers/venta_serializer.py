@@ -172,3 +172,25 @@ class PostVentaSerializer(serializers.Serializer):
 
             # return User.objects.create(**validated_data)
         return validated_data
+
+
+# Devolver productos, cantidades, precios, fecha, empleado, total
+
+class Venta2Serializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Tabla_intermedia_venta
+        fields = ['cantidad', 'venta', 'lote']
+
+    def to_representation(self, instance):
+        lote = Lote.objects.get(id=instance.lote_id)
+        venta = Venta.objects.get(id=instance.venta_id)
+        return {
+            'id': instance.id,
+            'lote_id': instance.lote_id,
+            'descripcion': lote.producto.descripcion,
+            'precio_unidad': lote.precio_de_venta,
+            'codigo_de_barra': lote.codigo_barra,
+            'cantidad_vendida': instance.cantidad,
+            'venta_id': venta.id
+        }
