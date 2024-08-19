@@ -303,9 +303,15 @@ class VentaDetalleViewSet(viewsets.ReadOnlyModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         venta_id = kwargs.get('pk')
-        queryset = self.queryset.filter(venta_id=venta_id)
-        venta = Venta.objects.get(id=venta_id)
+        queryset = self.queryset.filter(
+            venta_id=venta_id).select_related('venta')
         if queryset.exists():
+            venta = queryset[0].venta
             serializer = self.get_serializer(queryset, many=True)
-            return Response({'venta_id': venta_id, 'vendedor': venta.usuario, 'fecha': venta.fecha, 'venta': serializer.data}, status=status.HTTP_200_OK)
-        return Response({"detail": "No se encontraron registros para el venta_id dado."}, status=status.HTTP_404_NOT_FOUND)
+            return Response({'venta_id': venta_id, 'vendedor': venta.usuario,
+                             'fecha': venta.fecha,
+                             'venta': serializer.data},
+                            status=status.HTTP_200_OK)
+
+        return Response({"detail": "No se encontraron registros para el venta_id dado."},
+                        status=status.HTTP_404_NOT_FOUND)
