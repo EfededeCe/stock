@@ -101,7 +101,7 @@ class TbSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tabla_intermedia_venta
 
-        fields = ['cantidad',  'lote']
+        fields = ['cantidad', 'lote']
 
 
 class PostVentaSerializer(serializers.Serializer):
@@ -159,8 +159,9 @@ class PostVentaSerializer(serializers.Serializer):
                         float(lote_cant['cantidad'])
                     print('PRECIO TOTAL =====> ', precio_total)
                 # talonario['productos'].append(data_producto)
-                except:
-                    return
+                except Lote.DoesNotExist:
+                    raise serializers.ValidationError(
+                        "Error al restar cantidad del lote.")
 
             print(validated_data)
             venta = Venta.objects.create(
@@ -188,7 +189,7 @@ class PostVentaSerializer(serializers.Serializer):
         #        "id"=1,
         #         "usuario": "Fede",
         #          'fecha': ''
-        #!         es un arreglo de objetos
+        # !         es un arreglo de objetos
         #         "lote_cantidad": [
         #             {
         #                 "cantidad": 4,

@@ -91,8 +91,8 @@ class VentaPostAPIView(generics.CreateAPIView):
                 print('serializer.validated_data======> ',
                       venta['lote_cantidad'])
                 # print('serializer.data ======> ', serializer.data)
-                return Response({'message': 'Producto creado correctamente!', 'data':  venta}, status=status.HTTP_201_CREATED)
-            except:
+                return Response({'message': 'Producto creado correctamente!', 'data': venta}, status=status.HTTP_201_CREATED)
+            except ValueError:
                 return Response({'error': 'No son válidas algunas cantidades de productos!'},
                                 status=status.HTTP_406_NOT_ACCEPTABLE)
         print('serializer.data no válido ======> ',
