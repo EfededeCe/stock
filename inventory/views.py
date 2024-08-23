@@ -1,6 +1,10 @@
 # from rest_framework import DjangoFilterBackend, FilterSet
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
+# Autenticación
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
+
 # API views
 from rest_framework import status
 from rest_framework.response import Response
@@ -131,6 +135,13 @@ class GetAllVentasViewSet(viewsets.GenericViewSet):
 
     serializer_class = GetAllVentaSerializer
     queryset = Venta.objects.all()
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    print('authentication_classes ===> ', authentication_classes)
+    print('permission_classes ===> ', permission_classes)
+
     # queryset = Venta.objects.get(id=1).tabla_intermedia_venta_set.all()
     # queryset = Venta.objects.tabla_intermedia_venta_set.all()
     # print('===== View Queryset =====')
