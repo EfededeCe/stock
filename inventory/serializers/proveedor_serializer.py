@@ -15,6 +15,12 @@ class ProveedorIDNombreSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre')
         read_only_fields = ('id', 'nombre')
 
+    def to_representation(self, instance):
+        return {
+            'id': instance.id,
+            'descripcion': instance.nombre
+        }
+
 
 class ProveedorIDUrlSerializer(serializers.ModelSerializer):
 
