@@ -216,7 +216,8 @@ class PostVentaSerializer(serializers.Serializer):
             'venta_id': venta.id,
             'usuario': venta.usuario,
             'fecha': venta.fecha,
-            "lote_cantidad": info_lotes_cantidad
+            'lote_cantidad': info_lotes_cantidad,
+            'precio_de_venta_total': precio_total
         }
 
         return info_venta
