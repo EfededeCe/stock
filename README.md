@@ -1,6 +1,7 @@
 # Instalación inicial
 
 Para crear un [entorno virtual](https://docs.python.org/es/3/tutorial/venv.html) para las dependencias, se puede usar el comando:
+
 # si al haber creado el entorno surgue una modificiacion y se genera un error fatal en ejecutar requirements.txt borrar tutorial.env y volver a correr el entorno virtual
 
 ```sh
@@ -214,19 +215,19 @@ class ProveedorSerializer(serializers.ModelSerializer):
 ```
 
 ## Vistas => datos devueltos por serializers
-# en esta misma clase se ùeden crear fitros para consultas necesarias para obtener los id de los objetos de forma indirecta desde una peticion externa necesaria por ejemplo para hacer coincidir las FK de fomra correcta 
+
+# en esta misma clase se pueden crear fitros para consultas necesarias para obtener los id de los objetos de forma indirecta desde una peticion externa necesaria por ejemplo para hacer coincidir las FK de fomra correcta
 
 class ProductoView(viewsets.ModelViewSet):
-  serializer_class = ProductoSerializer
-  queryset = Producto.objects.all()
-  filter_backends = (DjangoFilterBackend,)
-  filterset_class = ProductoFilter
+serializer_class = ProductoSerializer
+queryset = Producto.objects.all()
+filter_backends = (DjangoFilterBackend,)
+filterset_class = ProductoFilter
 
-
-  class ProductoFilter(FilterSet):
-    class Meta:
-        model = Producto
-        fields = {
-            'descripcion': ['icontains'],
-            'codigo_del_local': ['icontains'],
-        }
+class ProductoFilter(FilterSet):
+class Meta:
+model = Producto
+fields = {
+'descripcion': ['icontains'],
+'codigo_del_local': ['icontains'],
+}

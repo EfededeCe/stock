@@ -53,7 +53,7 @@ class VentaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Venta
         fields = ['usuario', 'fecha',
-                  'precio_de_venta_Total', 'lotes']
+                  'precio_de_venta_total', 'lotes']
         # depth = 1
 
     def get_lotes(self, obj):
@@ -89,6 +89,13 @@ class VentaSerializer(serializers.ModelSerializer):
         return venta
 
 
+class VntSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Venta
+        fields = '__all__'
+
+
 class TbSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -105,9 +112,9 @@ class PostVentaSerializer(serializers.Serializer):
     {
         "usuario": "Fede",
         "fecha": "",
-        "precio_de_venta_Total": 0.00,
-        "lote_cantidad":[{"lote": 1, "cantidad": 4},
-        {"lote": 2, "cantidad": 25}]
+        "precio_de_venta_total": 0.00,
+        "lote_cantidad":[{"lote": 1, "cantidad": 1},
+        {"lote": 2, "cantidad": 1}]
 
     }
     """
@@ -132,6 +139,9 @@ class PostVentaSerializer(serializers.Serializer):
             print('====================================')
 
             precio_total = 0
+            print('====================================')
+            print('validated_data', validated_data)
+            print('====================================')
 
             print(lotes_cantidades)
             print('====================================')
@@ -141,16 +151,20 @@ class PostVentaSerializer(serializers.Serializer):
             print('====================================')
 
             for lote_cant in lotes_cantidades:
-                Lote.objects.select_for_update().get(id=lote_cant['lote'].id)
-                precio_total = precio_total + \
-                    float(lote_cant['lote'].precio_de_venta) * \
-                    float(lote_cant['cantidad'])
-                print('PRECIO TOTAL =====> ', precio_total)
+                try:
+                    Lote.objects.select_for_update().get(
+                        id=lote_cant['lote'].id)
+                    precio_total = precio_total + \
+                        float(lote_cant['lote'].precio_de_venta) * \
+                        float(lote_cant['cantidad'])
+                    print('PRECIO TOTAL =====> ', precio_total)
                 # talonario['productos'].append(data_producto)
+                except:
+                    return
 
             print(validated_data)
             venta = Venta.objects.create(
-                usuario=validated_data['usuario'], precio_de_venta_Total=precio_total)
+                usuario=validated_data['usuario'], precio_de_venta_total=precio_total)
             print(venta)
 
             # print(asd)
@@ -161,36 +175,121 @@ class PostVentaSerializer(serializers.Serializer):
                 print('cantidad ====> ', lote['cantidad'])
                 Tabla_intermedia_venta.objects.create(
                     venta_id=venta.id, lote_id=lote['lote'].id, cantidad=lote['cantidad'])
-            try:
-                Lote.objects.get(id=lote['lote'].id).restar_cantidad(
-                    lote['cantidad'])
+                try:
+                    Lote.objects.get(id=lote['lote'].id).restar_cantidad(
+                        lote['cantidad'])
 
-            except ValueError:
-                raise
+                except ValueError:
+                    raise
 
                 # lote.restar_cantidad(lote['cantidad'])
-
+        # TODO: devolver con el siguiente formato
+        #     "data": {
+        #        "id"=1,
+        #         "usuario": "Fede",
+        #          'fecha': ''
+        #!         es un arreglo de objetos
+        #         "lote_cantidad": [
+        #             {
+        #                 "cantidad": 4,
+        #                 "lote": 1
+        #                  'nombre': '',
+        #                  'precio_unitario' : ''
+        #             }
+        #         ]
+        #     }
             # return User.objects.create(**validated_data)
-        return validated_data
+
+        # return validated_data
+        info_lotes_cantidad = []
+
+        for lote_cant in lotes_cantidades:
+            info_lotes_cantidad.append({
+                'cantidad': lote_cant['cantidad'],
+                'lote_id': lote_cant['lote'].id,
+                'nombre': lote_cant['lote'].producto.descripcion,
+                'precio_unitario': lote_cant['lote'].precio_de_venta
+            })
+
+        info_venta = {
+            'venta_id': venta.id,
+            'usuario': venta.usuario,
+            'fecha': venta.fecha,
+            "lote_cantidad": info_lotes_cantidad
+        }
+
+        return info_venta
 
 
 # Devolver productos, cantidades, precios, fecha, empleado, total
 
 class Venta2Serializer(serializers.ModelSerializer):
 
+    usuario = serializers.CharField(max_length=40, required=False)
+    lote_cantidad = TbSerializer(many=True)
+
     class Meta:
         model = Tabla_intermedia_venta
-        fields = ['cantidad', 'venta', 'lote']
+        fields = ['cantidad', 'venta', 'lote', 'usuario', 'lote_cantidad']
 
     def to_representation(self, instance):
         lote = Lote.objects.get(id=instance.lote_id)
         venta = Venta.objects.get(id=instance.venta_id)
         return {
-            'id': instance.id,
+            'tb_inter_id': instance.id,
+            'venta_id': venta.id,
             'lote_id': instance.lote_id,
             'descripcion': lote.producto.descripcion,
             'precio_unidad': lote.precio_de_venta,
             'codigo_de_barra': lote.codigo_barra,
-            'cantidad_vendida': instance.cantidad,
-            'venta_id': venta.id
+            'cantidad_vendida': instance.cantidad
+        }
+
+
+class GetAllVentaSerializer(serializers.ModelSerializer):
+
+    # usuario = serializers.CharField(max_length=40, required=False)
+    # lote_cantidad = TbSerializer(many=True)
+
+    class Meta:
+        model = Venta
+        # fields = ['cantidad', 'venta', 'lote', 'usuario', 'lote_cantidad']
+        fields = '__all__'
+
+    def to_representation(self, instance):
+        # lote = Lote.objects.get(id=instance.lote_id)
+        # venta = Venta.objects.get(id=instance.venta_id)
+
+        # print('=============== Instance ================')
+        # print('=============== Instance ================')
+        tb_inter = instance.tabla_intermedia_venta_set.all().select_related('lote__producto')
+        # print(tb_inter)
+        lote_cantidad = []
+        for row_tb_inter in tb_inter:
+            # print('LOTE     =======> ', row_tb_inter.lote)
+            # print('CANTIDAD =======> ', row_tb_inter.cantidad)
+            lote_cantidad.append(
+                {
+                    'lote_id': row_tb_inter.lote.id,
+                    'descripcion': row_tb_inter.lote.producto.descripcion,
+                    'precio_unitario': row_tb_inter.lote.precio_de_venta,
+                    'codigo_de_barra': row_tb_inter.lote.codigo_barra,
+                    'codigo_local': row_tb_inter.lote.producto.codigo_del_local,
+                    'cantidad': row_tb_inter.cantidad
+                })
+
+        # print('=============== Instance ================')
+        # print('=============== Instance ================')
+        # print('=============== Venta ================')
+        # print('=============== Venta ================')
+        # print(Venta.objects.get(instance.venta))
+        # print('=============== Venta ================')
+        # print('=============== Venta ================')
+
+        return {
+            'venta_id': instance.id,
+            'fecha': instance.fecha,
+            'vendedor': instance.usuario,
+            'precio_total': instance.precio_de_venta_total,
+            'lote_cantidad': lote_cantidad,
         }

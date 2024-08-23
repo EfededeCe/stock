@@ -111,7 +111,7 @@
     "fields": {
       "usuario": "Empleado 2",
       "fecha": "2024-07-06T16:06:10.486355Z",
-      "precio_de_venta_Total": 1500000
+      "precio_de_venta_total": 1500000
     }
   },
   {
@@ -120,7 +120,7 @@
     "fields": {
       "usuario": "Empleado 3",
       "fecha": "2024-07-08T09:45:32.486112Z",
-      "precio_de_venta_Total": 25000.0
+      "precio_de_venta_total": 25000.0
     }
   },
   {

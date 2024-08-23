@@ -21,26 +21,18 @@ router.register(r'proveedores-id-url',
 router.register(r'lotes', views.LoteView, 'lotes')
 
 router.register(r'ventas', views.VentaView, 'ventas')
-router.register(r'vpost', views.VentaViewSet, 'venta post')
-
-router.register(r'tabla_intermedia_venta',
-                views.Tabla_intermedia_ventaView, 'tabla_intermedia_venta')
-router.register(r'inter',
-                views.IntermediaViewSet, 'tb_intermedia')
-
-router.register(r'v',
-                views.TalonarioViewSet, 'get_talonario')
-
-router.register(r've',
-                views.VentaPostViewSet, 'post_venta')
-
-router.register(r'view2',
-                views.VentaPostViewSet, 'post_venta_2')
 
 router.register(r'vget',
                 views.VentaDetalleViewSet, 'get_venta')
 
+# router.register(r'vgp',
+#                 views.VentaDetalleGetPostViewSet, 'get_post_venta')
+
+router.register(r'gav',
+                views.GetAllVentasViewSet, 'get_all_venta')
+
 urlpatterns = [
-    path('api/v1/view', views.VentaPostAPIView.as_view(), name='api_view'),
-    path('api/v1/', include(router.urls))
+    path('api/v1/', include(router.urls)),
+    path('api/v1/presupuesto',
+         views.VentaPostAPIView.as_view(), name='api_view'),
 ]

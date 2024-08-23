@@ -46,11 +46,12 @@ class Lote(models.Model):
         if cantidad <= 0:
             raise ValueError("La cantidad debe ser positiva")
         if cantidad > self.cantidad:
-            raise ValueError("La cantidad a restar no puede ser mayor a la cantidad disponible")
-        
+            raise ValueError(
+                "La cantidad a restar no puede ser mayor a la cantidad disponible")
+
         self.cantidad -= cantidad
         self.save()
-        
+
     def __str__(self):
         return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
 
@@ -58,7 +59,7 @@ class Lote(models.Model):
 class Venta(models.Model):
     usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
-    precio_de_venta_Total = models.DecimalField(
+    precio_de_venta_total = models.DecimalField(
         max_digits=12, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
     lotes = models.ManyToManyField(
         Lote, through="Tabla_intermedia_venta")
@@ -67,7 +68,7 @@ class Venta(models.Model):
         ordering = ["fecha"]
 
     def _str_(self):
-        return "{0}/{1}/{2}/{3}".format(self.usuario, self.fecha, self.productosLote, self.precio_de_venta_total)
+        return "{0}/{1}/{2}/{3}".format(self.usuario, self.fecha, self.lotes, self.precio_de_venta_total)
 
 
 class Tabla_intermedia_venta(models.Model):
