@@ -31,7 +31,7 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'http://127.0.0.1:1337',
-
+    'http://127.0.0.1:5500',
 ]
 # Application definition
 
@@ -146,6 +146,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Setear globalmente los filtros de DRF
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    # ],
+
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
 }
 
 

@@ -1,15 +1,21 @@
 # from rest_framework import DjangoFilterBackend, FilterSet
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
 # Autenticación
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 # API views
 from rest_framework import status
 from rest_framework.response import Response
 
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, views
 
 # SERIALIZERS
 from .serializers.general_serializer import ProductoLoteProveedorSerializer
@@ -133,14 +139,14 @@ class VentaDetalleViewSet(viewsets.ReadOnlyModelViewSet):
 
 class GetAllVentasViewSet(viewsets.GenericViewSet):
 
-    serializer_class = GetAllVentaSerializer
-    queryset = Venta.objects.all()
-
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
 
     print('authentication_classes ===> ', authentication_classes)
     print('permission_classes ===> ', permission_classes)
+
+    serializer_class = GetAllVentaSerializer
+    queryset = Venta.objects.all()
 
     # queryset = Venta.objects.get(id=1).tabla_intermedia_venta_set.all()
     # queryset = Venta.objects.tabla_intermedia_venta_set.all()
@@ -151,6 +157,78 @@ class GetAllVentasViewSet(viewsets.GenericViewSet):
     # print('===== View Queryset =====')
 
     def list(self, request, *args, **kwargs):
+        print('list request ===> ')
+        print('request.user ===> ', request.user)
+        print('request.user ===> ', User.objects.get(
+            username=request.user))
+        print('request.auth ===> ', request.auth)
+        print(request)
+        print(request.session)
+        print(request.session.get_session_cookie_age())
         queryset = self.get_queryset()
         serializer = GetAllVentaSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+# @method_decorator(ensure_csrf_cookie, name='dispatch')
+class Login(views.APIView):
+
+    def get(self, request, *args, **kwargs):
+        # Enviar el token CSRF
+        csrf_token = get_token(request)
+        print('Token ===========> ')
+        print(csrf_token)
+        return Response({'message': 'Token CSRF generado', 'csrfToken': csrf_token}, status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        # serializer = self.get_serializer(data=request.data)
+        # serializer.is_valid(raise_exception=True)
+        # user = serializer.validated_data['user']
+        # token, created = Token.objects.get_or_create(user=user)
+        # return Response({'token': token.key})
+        print("POST /login/ - Datos recibidos:")
+        print("Username:", request.data.get('username'))
+        print("Password:", request.data.get('password'))
+        print("Cookies:", request.COOKIES)
+        print("CSRF Token from Cookie:", request.COOKIES.get('csrftoken'))
+
+        print("request['username'] =======> ")
+        print(request.data['username'])
+        print(request.data['password'])
+        username = request.data['username']
+        password = request.data['password']
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            print('hay usuairo')
+            login(request, user)
+        else:
+            print('no hay usuario')
+
+        return Response({'message': 'Login exitoso', 'usuario': request.data['username']}, status=status.HTTP_200_OK)
+
+# def my_view(request):
+#     username = request.POST["username"]
+#     password = request.POST["password"]
+#     user = authenticate(request, username=username, password=password)
+#     if user is not None:
+#         login(request, user)
+#         # Redirect to a success page.
+#         ...
+#     else:
+#         # Return an 'invalid login' error message.
+#         ...
+
+
+# @method_decorator(ensure_csrf_cookie, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
+class Logout(views.APIView):
+
+    def post(self, request, *args, **kwargs):
+        print("POST /logout/ - Intentando cerrar sesión")
+        print("Cookies:", request.COOKIES)
+        print("CSRF Token from Cookie:", request.COOKIES.get('csrftoken'))
+
+        logout(request)
+        print("Sesión cerrada.")
+        return Response({'message': 'Logout exitoso'}, status=status.HTTP_200_OK)
