@@ -1,11 +1,11 @@
 from django.db import models
 from django.utils import timezone
 from django.core.validators import MinValueValidator
-
+from django_prometheus.models import ExportModelOperationsMixin
 # Create your models here.
 
 
-class Proveedor(models.Model):
+class Proveedor(ExportModelOperationsMixin('proveedor'), models.Model):
     nombre = models.CharField(max_length=250, unique=True)
     url = models.CharField(max_length=250, unique=True)
 
@@ -13,7 +13,7 @@ class Proveedor(models.Model):
         return self.nombre
 
 
-class Producto(models.Model):
+class Producto(ExportModelOperationsMixin('producto'), models.Model):
     descripcion = models.CharField(max_length=250)
     codigo_del_local = models.CharField(max_length=100, unique=True)
     modelo = models.CharField(max_length=100)
@@ -23,7 +23,7 @@ class Producto(models.Model):
         return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
 
 
-class Lote(models.Model):
+class Lote(ExportModelOperationsMixin('lote'), models.Model):
     codigo_barra = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_compra = models.DecimalField(
@@ -56,7 +56,7 @@ class Lote(models.Model):
         return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
 
 
-class Venta(models.Model):
+class Venta(ExportModelOperationsMixin('venta'), models.Model):
     usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_venta_total = models.DecimalField(
@@ -71,7 +71,7 @@ class Venta(models.Model):
         return "{0}/{1}/{2}/{3}".format(self.usuario, self.fecha, self.lotes, self.precio_de_venta_total)
 
 
-class Tabla_intermedia_venta(models.Model):
+class Tabla_intermedia_venta(ExportModelOperationsMixin('tabla_intermedia_venta'), models.Model):
     cantidad = models.PositiveIntegerField(default=0)
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
