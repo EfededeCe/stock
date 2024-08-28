@@ -22,7 +22,7 @@ from inventory.views import Login, Logout
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('inventory.urls')),
-    path('login/', Login.as_view(), name='login'),
-    path('logout/', Logout.as_view(), name='logout'),
+    path('api/v1/login/', Login.as_view(), name='login'),
+    path('api/v1/logout/', Logout.as_view(), name='logout'),
     path('', include('django_prometheus.urls')),
 ]
