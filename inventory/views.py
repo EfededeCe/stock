@@ -202,10 +202,11 @@ class Login(views.APIView):
         if user is not None:
             print('hay usuairo')
             login(request, user)
+            return Response({'message': 'Login exitoso', 'usuario': request.data['username']}, status=status.HTTP_200_OK)
         else:
             print('no hay usuario')
+            return Response({'message': 'No se pudo realizar el login'}, status=status.HTTP_401_UNAUTHORIZED)
 
-        return Response({'message': 'Login exitoso', 'usuario': request.data['username']}, status=status.HTTP_200_OK)
 
 # def my_view(request):
 #     username = request.POST["username"]
