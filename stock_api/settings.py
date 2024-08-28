@@ -178,4 +178,7 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Pruebas para el login
+# !!!! Borrar o definir nuevamente en True
 SESSION_COOKIE_HTTPONLY = False
+SESSION_COOKIE_SAMESITE = 'None'
