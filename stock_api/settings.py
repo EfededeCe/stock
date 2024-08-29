@@ -176,9 +176,17 @@ CORS_ALLOWED_ORIGINS = [
 
 # CORS_ALLOW_ALL_ORIGINS = True
 
+
 CORS_ALLOW_CREDENTIALS = True
+
+# permite sólo estos HEADERS
+CORS_ALLOW_HEADERS = [
+    'sessionid',
+    'content-type',
+    'x-csrftoken',
+]
 
 # Pruebas para el login
 # !!!! Borrar o definir nuevamente en True
-SESSION_COOKIE_HTTPONLY = False
-SESSION_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_HTTPONLY = False
+# SESSION_COOKIE_SAMESITE = 'None'

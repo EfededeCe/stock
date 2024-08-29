@@ -66,6 +66,11 @@ class VentaView(viewsets.ModelViewSet):
 
 
 class ProductoLoteProveedorView(viewsets.ModelViewSet):
+
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    print("Producto - Lote - etc")
     serializer_class = ProductoLoteProveedorSerializer
     queryset = Producto.objects.all()
 
