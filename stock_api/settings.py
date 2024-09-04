@@ -160,6 +160,10 @@ REST_FRAMEWORK = {
     ]
 }
 
+# Tiempo de duración de sesión en segundos
+# 10hs ==> 36000
+# 12hs ==> 43200
+SESSION_COOKIE_AGE = 43200
 
 # Agregado para usar con la biblioteca django-cors-headers
 CORS_ALLOWED_ORIGINS = [
