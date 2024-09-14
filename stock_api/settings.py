@@ -31,7 +31,8 @@ ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'http://127.0.0.1:1337',
-    'http://127.0.0.1:5500',
+    'http://back:1337',
+    'http://172.18.0.1',
 ]
 # Application definition
 
@@ -165,20 +166,29 @@ REST_FRAMEWORK = {
 # 12hs ==> 43200
 SESSION_COOKIE_AGE = 43200
 
-# Agregado para usar con la biblioteca django-cors-headers
+# Agregado para usar con la biblioteca django-cors-headers aca se agregan las ips en local host
 CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5500",
     "http://127.0.0.1",
     "http://127.0.0.1:3000",
     "http://localhost:3000",
+    "http://localhost:1337",
+    "http://back:1337",
+    "http://back:3000",
     "http://127.0.0.1:8000",
-    # "http://181.20.23.127:0",
+    "http://192.168.0.1",
+    "http://192.168.0.8",
+    "http://192.168.0.2",
+    "http://192.168.0.2:1337",
+    "http://172.18.0.1",
+    "http://172.18.0.1:1337",
+    # "http://181.20.23.7:0",
     # "https://181.20.23.127:0",
     # "http://181.166.206.193:0",
     # "https://181.166.206.193:0",
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 
 
 CORS_ALLOW_CREDENTIALS = True
