@@ -32,6 +32,8 @@ CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'http://127.0.0.1:1337',
     'http://back:1337',
+    'http://tarrabe',
+    'http://tarrabe:1337',
     'http://172.18.0.1',
 ]
 # Application definition
@@ -173,7 +175,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:1337",
-    "http://back:1337",
+    "http://tarrabe",
+    "http://tarrabe:1337",
     "http://back:3000",
     "http://127.0.0.1:8000",
     "http://192.168.0.1",
