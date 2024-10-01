@@ -28,6 +28,10 @@ DEBUG = os.environ.get('DEBUG', default=0)
 
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
+# Configuración para proxies reversos, como Nginx
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'http://127.0.0.1:1337',
