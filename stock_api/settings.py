@@ -41,6 +41,20 @@ LOGGING = {
             "level": "DEBUG",
             "propagate": False,
         },
+        'django.request': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # Captura detalles sobre errores y excepciones
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # Para obtener más información sobre problemas de seguridad como CSRF
+            'propagate': False,
+        },
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG',  # Logs de consultas SQL ejecutadas
+        },
     },
     "handlers": {
         "console": {
