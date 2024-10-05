@@ -51,7 +51,7 @@ LOGGING = {
     },
     "formatters": {
         "verbose": {
-            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message} {pathname}:{lineno} {funcName}",
             "style": "{",
         },
         "simple": {
