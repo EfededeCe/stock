@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.validators import MinValueValidator
 from django_prometheus.models import ExportModelOperationsMixin
+import decimal
 # Create your models here.
 
 
@@ -27,16 +28,16 @@ class Lote(ExportModelOperationsMixin('lote'), models.Model):
     codigo_barra = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_compra = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(0.00)], decimal_places=2)
+        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2)
     precio_bonificado = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(0.00)], decimal_places=2, null=True)
+        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2, null=True)
     ultimo_precio = models.DecimalField(
         max_digits=12, decimal_places=2, null=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(
         validators=[MinValueValidator(0)], null=False)
     precio_de_venta = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(0.00)], decimal_places=2)
+        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2)
     iva = models.DecimalField(max_digits=12, decimal_places=2, null=True)
     producto = models.ForeignKey(
         Producto, on_delete=models.CASCADE, default='0')
@@ -60,7 +61,7 @@ class Venta(ExportModelOperationsMixin('venta'), models.Model):
     usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_venta_total = models.DecimalField(
-        max_digits=12, decimal_places=2, validators=[MinValueValidator(0.00)], null=True, blank=True)
+        max_digits=12, decimal_places=2, validators=[MinValueValidator(decimal.Decimal("0.00"))], null=True, blank=True)
     lotes = models.ManyToManyField(
         Lote, through="Tabla_intermedia_venta")
 

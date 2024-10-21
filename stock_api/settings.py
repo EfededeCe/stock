@@ -29,7 +29,7 @@ DEBUG = os.environ.get('DEBUG', default=0)
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS').split(' ')
 
 # Configuración para proxies reversos, como Nginx
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 LOGGING = {
     "version": 1,
@@ -79,10 +79,17 @@ LOGGING = {
 CSRF_TRUSTED_ORIGINS = [
     'http://127.0.0.1',
     'http://127.0.0.1:1337',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:8000',
+    'http://localhost:3000',
+    'http://localhost:8000',
     'http://back:1337',
     'http://tarrabe',
     'http://tarrabe:1337',
+    'http://tarrabe:3000',
+    'http://tarrabe:8000',
     'http://172.18.0.1',
+
 ]
 # Application definition
 
@@ -201,14 +208,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
 
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES': [
+    #     'rest_framework.authentication.BasicAuthentication',
+    #     'rest_framework.authentication.SessionAuthentication',
+    # ],
 
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',
-    ]
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
 }
 
 # Tiempo de duración de sesión en segundos
@@ -223,8 +230,11 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:3000",
     "http://localhost:3000",
     "http://localhost:1337",
+    "http://localhost:8000",
     "http://tarrabe",
     "http://tarrabe:1337",
+    "http://tarrabe:3000",
+    "http://tarrabe:8000",
     "http://back:3000",
     "http://127.0.0.1:8000",
     "http://192.168.0.1",
@@ -233,6 +243,8 @@ CORS_ALLOWED_ORIGINS = [
     "http://192.168.0.2:1337",
     "http://172.18.0.1",
     "http://172.18.0.1:1337",
+    "http://172.21.0.1",
+    "http://172.21.0.1:1337",
     # "http://181.20.23.7:0",
     # "https://181.20.23.127:0",
     # "http://181.166.206.193:0",

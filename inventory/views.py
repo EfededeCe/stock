@@ -70,14 +70,16 @@ class VentaView(viewsets.ModelViewSet):
 
 class ProductoLoteProveedorView(viewsets.ModelViewSet):
 
-    authentication_classes = [SessionAuthentication, BasicAuthentication]
-    permission_classes = [IsAuthenticated]
+    # authentication_classes = [SessionAuthentication, BasicAuthentication]
+    # permission_classes = [IsAuthenticated]
 
     print("Producto - Lote - etc")
     serializer_class = ProductoLoteProveedorSerializer
     queryset = Producto.objects.all()
 
 
+# /api/v1/presupeusto/
+# @csrf_exempt
 class VentaPostAPIView(generics.CreateAPIView):
     # class VentaPostAPIView(viewsets.GenericViewSet):
     serializer_class = PostVentaSerializer
@@ -90,9 +92,17 @@ class VentaPostAPIView(generics.CreateAPIView):
 
     def create(self, request):
         serializer = self.serializer_class(data=request.data)
+        print('=============== VentaPostAPIView create() =================')
+
+        print('=============== VentaPostAPIView create() =================')
 
         # intercepta los datos
+        print('=========== request.data ===========')
         print(request.data)
+        print('=========== request.headers ===========')
+        print(request.headers)
+        print('=========== request.COOKIES ===========')
+        print(request.COOKIES)
 
         if serializer.is_valid():
             try:
@@ -110,7 +120,7 @@ class VentaPostAPIView(generics.CreateAPIView):
                 print('serializer.validated_data======> ',
                       venta['lote_cantidad'])
                 # print('serializer.data ======> ', serializer.data)
-                return Response({'message': 'Producto creado correctamente!', 'data': venta}, status=status.HTTP_201_CREATED)
+                return Response({'message': 'Venta creada correctamente!', 'data': venta}, status=status.HTTP_201_CREATED)
             except ValueError:
                 return Response({'error': 'No son válidas algunas cantidades de productos!'},
                                 status=status.HTTP_406_NOT_ACCEPTABLE)

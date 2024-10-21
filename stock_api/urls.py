@@ -24,5 +24,5 @@ urlpatterns = [
     path('', include('inventory.urls')),
     path('api/v1/login/', Login.as_view(), name='login'),
     path('api/v1/logout/', Logout.as_view(), name='logout'),
-    path('', include('django_prometheus.urls')),
+    path('', include('django_prometheus.urls')),    # /metrics
 ]
