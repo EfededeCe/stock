@@ -1,4 +1,3 @@
-import logging
 # from rest_framework import DjangoFilterBackend, FilterSet
 from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
@@ -24,8 +23,6 @@ from .serializers.lote_serializer import LoteSerializer
 from .serializers.producto_serializers import ProductoSerializer, ProductoIDDescSerializer, ProductoIDCodigoSerializer
 from .serializers.proveedor_serializer import ProveedorSerializer, ProveedorIDNombreSerializer, ProveedorIDUrlSerializer
 from .serializers.venta_serializer import VentaSerializer, PostVentaSerializer, Venta2Serializer, GetAllVentaSerializer
-
-logger = logging.getLogger(__name__)
 
 
 class ProveedorIDUrlView(viewsets.ModelViewSet):
@@ -83,7 +80,6 @@ class ProductoLoteProveedorView(viewsets.ModelViewSet):
 class VentaPostAPIView(generics.CreateAPIView):
     # class VentaPostAPIView(viewsets.GenericViewSet):
     serializer_class = PostVentaSerializer
-    logger.info("venta post api view ")
 
     print('================================')
 
