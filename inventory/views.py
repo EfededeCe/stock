@@ -26,49 +26,65 @@ from .serializers.venta_serializer import VentaSerializer, PostVentaSerializer, 
 
 
 class ProveedorIDUrlView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProveedorIDUrlSerializer
     queryset = Proveedor.objects.all()
 
 
 class ProductoView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductoSerializer
     queryset = Producto.objects.all()
 
 
 class ProductoIDDescView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductoIDDescSerializer
     queryset = Producto.objects.all()
 
 
 class ProductoIDCodigoView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductoIDCodigoSerializer
     queryset = Producto.objects.all()
 
 
 class ProveedorView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProveedorSerializer
     queryset = Proveedor.objects.all()
 
 
 class ProveedorIDNombreView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = ProveedorIDNombreSerializer
     queryset = Proveedor.objects.all()
 
 
 class LoteView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = LoteSerializer
     queryset = Lote.objects.all()
 
 
 class VentaView(viewsets.ModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = VentaSerializer
     queryset = Venta.objects.all()
 
 
 class ProductoLoteProveedorView(viewsets.ModelViewSet):
 
-    # authentication_classes = [SessionAuthentication, BasicAuthentication]
-    # permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     print("Producto - Lote - etc")
     serializer_class = ProductoLoteProveedorSerializer
@@ -78,6 +94,8 @@ class ProductoLoteProveedorView(viewsets.ModelViewSet):
 # /api/v1/presupeusto/
 # @csrf_exempt
 class VentaPostAPIView(generics.CreateAPIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
     # class VentaPostAPIView(viewsets.GenericViewSet):
     serializer_class = PostVentaSerializer
 
@@ -131,6 +149,8 @@ class VentaPostAPIView(generics.CreateAPIView):
 # Url => http://localhost:8000/drf-endpoints/api/v1/vget/  2/
 
 class VentaDetalleViewSet(viewsets.ReadOnlyModelViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     serializer_class = Venta2Serializer
     # queryset = Venta.objects.all()
@@ -239,6 +259,8 @@ class Login(views.APIView):
 # @method_decorator(ensure_csrf_cookie, name='dispatch')
 # @method_decorator(csrf_exempt, name='dispatch')
 class Logout(views.APIView):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         print("POST /logout/ - Intentando cerrar sesión")

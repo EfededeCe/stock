@@ -1,31 +1,22 @@
 [
   {
-    "pk": 1,
     "model": "inventory.proveedor",
-    "fields": {
-      "nombre": "Repuestos Warnes",
-      "url": "www.re-warnes.com"
-    }
+    "pk": 1,
+    "fields": { "nombre": "Repuestos Warnes", "url": "www.re-warnes.com" }
   },
   {
+    "model": "inventory.proveedor",
     "pk": 2,
-    "model": "inventory.proveedor",
-    "fields": {
-      "nombre": "Auto partes Mignolo",
-      "url": "www.mignolo.com.ar"
-    }
+    "fields": { "nombre": "Auto partes Mignolo", "url": "www.mignolo.com.ar" }
   },
   {
+    "model": "inventory.proveedor",
     "pk": 3,
-    "model": "inventory.proveedor",
-    "fields": {
-      "nombre": "Cossuol La Plata",
-      "url": "www.cossuol-lp.com.ar"
-    }
+    "fields": { "nombre": "Cossuol La Plata", "url": "www.cossuol-lp.com.ar" }
   },
   {
-    "pk": 1,
     "model": "inventory.producto",
+    "pk": 1,
     "fields": {
       "descripcion": "Freno Peugeot 2015",
       "codigo_del_local": "f78d",
@@ -34,8 +25,8 @@
     }
   },
   {
-    "pk": 2,
     "model": "inventory.producto",
+    "pk": 2,
     "fields": {
       "descripcion": "Freno Nissan",
       "codigo_del_local": "48s",
@@ -44,8 +35,8 @@
     }
   },
   {
-    "pk": 3,
     "model": "inventory.producto",
+    "pk": 3,
     "fields": {
       "descripcion": "Bujía Peugeot",
       "codigo_del_local": "s2ji",
@@ -54,8 +45,8 @@
     }
   },
   {
-    "pk": 4,
     "model": "inventory.producto",
+    "pk": 4,
     "fields": {
       "descripcion": "Piston",
       "codigo_del_local": "fh32",
@@ -64,8 +55,8 @@
     }
   },
   {
-    "pk": 5,
     "model": "inventory.producto",
+    "pk": 5,
     "fields": {
       "descripcion": "Amortiguador",
       "codigo_del_local": "j337o",
@@ -74,89 +65,217 @@
     }
   },
   {
-    "pk": 1,
     "model": "inventory.lote",
+    "pk": 1,
     "fields": {
       "codigo_barra": "04684965",
-      "fecha": "2024-07-03T20:07:19.632183Z",
-      "precio_de_compra": 98000.0,
-      "precio_bonificado": 95000.0,
-      "ultimo_precio": 90000,
+      "fecha": "2024-07-03T20:07:19.632Z",
+      "precio_de_compra": "98000.00",
+      "precio_bonificado": "95000.00",
+      "ultimo_precio": "90000.00",
       "proveedor": 1,
       "cantidad": 50,
-      "precio_de_venta": 150000.0,
-      "iva": 25,
+      "precio_de_venta": "150000.00",
+      "iva": "25.00",
       "producto": 4
     }
   },
   {
-    "pk": 2,
     "model": "inventory.lote",
+    "pk": 2,
     "fields": {
       "codigo_barra": "00231548",
-      "fecha": "2024-07-04T16:06:10.486355Z",
-      "precio_de_compra": 10000.0,
-      "precio_bonificado": 9500.0,
-      "ultimo_precio": 9500,
+      "fecha": "2024-07-04T16:06:10.486Z",
+      "precio_de_compra": "10000.00",
+      "precio_bonificado": "9500.00",
+      "ultimo_precio": "9500.00",
       "proveedor": 2,
       "cantidad": 50,
-      "precio_de_venta": 18500.0,
-      "iva": 21,
+      "precio_de_venta": "18500.00",
+      "iva": "21.00",
       "producto": 1
     }
   },
   {
-    "pk": 1,
+    "model": "inventory.lote",
+    "pk": 3,
+    "fields": {
+      "codigo_barra": "10626540",
+      "fecha": "2024-07-04T16:06:15.486Z",
+      "precio_de_compra": "4864.00",
+      "precio_bonificado": "486.00",
+      "ultimo_precio": "9500.00",
+      "proveedor": 2,
+      "cantidad": 80,
+      "precio_de_venta": "5900.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 4,
+    "fields": {
+      "codigo_barra": "42211579",
+      "fecha": "2024-07-04T16:06:17.486Z",
+      "precio_de_compra": "4864.00",
+      "precio_bonificado": "486.00",
+      "ultimo_precio": "9500.00",
+      "proveedor": 1,
+      "cantidad": 80,
+      "precio_de_venta": "5900.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 5,
+    "fields": {
+      "codigo_barra": "46273571",
+      "fecha": "2024-07-04T16:06:18.486Z",
+      "precio_de_compra": "11222.00",
+      "precio_bonificado": "22111.00",
+      "ultimo_precio": "11000.00",
+      "proveedor": 3,
+      "cantidad": 80,
+      "precio_de_venta": "22222.00",
+      "iva": "21.00",
+      "producto": 4
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 6,
+    "fields": {
+      "codigo_barra": "4861256",
+      "fecha": "2024-10-26T14:36:39.141Z",
+      "precio_de_compra": "1566.00",
+      "precio_bonificado": "9845.00",
+      "ultimo_precio": null,
+      "proveedor": 2,
+      "cantidad": 150,
+      "precio_de_venta": "9846.00",
+      "iva": "21.00",
+      "producto": 3
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 7,
+    "fields": {
+      "codigo_barra": "85465468",
+      "fecha": "2024-10-26T14:38:18.099Z",
+      "precio_de_compra": "10.00",
+      "precio_bonificado": "1.00",
+      "ultimo_precio": null,
+      "proveedor": 2,
+      "cantidad": 1,
+      "precio_de_venta": "5.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 8,
+    "fields": {
+      "codigo_barra": "85465468",
+      "fecha": "2024-10-26T14:38:28.073Z",
+      "precio_de_compra": "10.00",
+      "precio_bonificado": "1.00",
+      "ultimo_precio": null,
+      "proveedor": 3,
+      "cantidad": 1,
+      "precio_de_venta": "5.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 9,
+    "fields": {
+      "codigo_barra": "85465468",
+      "fecha": "2024-10-26T14:38:33.598Z",
+      "precio_de_compra": "10.00",
+      "precio_bonificado": "1.00",
+      "ultimo_precio": null,
+      "proveedor": 1,
+      "cantidad": 1,
+      "precio_de_venta": "5.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 10,
+    "fields": {
+      "codigo_barra": "85465468",
+      "fecha": "2024-10-26T14:38:49.772Z",
+      "precio_de_compra": "15.00",
+      "precio_bonificado": "1.00",
+      "ultimo_precio": null,
+      "proveedor": 1,
+      "cantidad": 1,
+      "precio_de_venta": "10.00",
+      "iva": "21.00",
+      "producto": 5
+    }
+  },
+  {
+    "model": "inventory.lote",
+    "pk": 11,
+    "fields": {
+      "codigo_barra": "3125498",
+      "fecha": "2024-10-26T14:40:34.525Z",
+      "precio_de_compra": "10000.00",
+      "precio_bonificado": "5000.00",
+      "ultimo_precio": null,
+      "proveedor": 3,
+      "cantidad": 20,
+      "precio_de_venta": "15000.00",
+      "iva": "21.00",
+      "producto": 3
+    }
+  },
+  {
     "model": "inventory.venta",
+    "pk": 1,
     "fields": {
       "usuario": "Empleado 2",
-      "fecha": "2024-07-06T16:06:10.486355Z",
-      "precio_de_venta_total": 1500000
+      "fecha": "2024-07-06T16:06:10.486Z",
+      "precio_de_venta_total": "1500000.00"
     }
   },
   {
-    "pk": 2,
     "model": "inventory.venta",
+    "pk": 2,
     "fields": {
       "usuario": "Empleado 3",
-      "fecha": "2024-07-08T09:45:32.486112Z",
-      "precio_de_venta_total": 25000.0
+      "fecha": "2024-07-08T09:45:32.486Z",
+      "precio_de_venta_total": "25000.00"
     }
   },
   {
+    "model": "inventory.tabla_intermedia_venta",
     "pk": 1,
-    "model": "inventory.tabla_intermedia_venta",
-    "fields": {
-      "cantidad": 4,
-      "venta": 1,
-      "lote": 1
-    }
+    "fields": { "cantidad": 4, "venta": 1, "lote": 1 }
   },
   {
+    "model": "inventory.tabla_intermedia_venta",
     "pk": 2,
-    "model": "inventory.tabla_intermedia_venta",
-    "fields": {
-      "cantidad": 2,
-      "venta": 1,
-      "lote": 2
-    }
+    "fields": { "cantidad": 2, "venta": 1, "lote": 2 }
   },
   {
+    "model": "inventory.tabla_intermedia_venta",
     "pk": 3,
-    "model": "inventory.tabla_intermedia_venta",
-    "fields": {
-      "cantidad": 1,
-      "venta": 2,
-      "lote": 2
-    }
+    "fields": { "cantidad": 1, "venta": 2, "lote": 2 }
   },
   {
-    "pk": 4,
     "model": "inventory.tabla_intermedia_venta",
-    "fields": {
-      "cantidad": 5,
-      "venta": 2,
-      "lote": 1
-    }
+    "pk": 4,
+    "fields": { "cantidad": 5, "venta": 2, "lote": 1 }
   }
 ]
