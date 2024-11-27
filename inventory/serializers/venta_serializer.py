@@ -107,7 +107,7 @@ class TbSerializer(serializers.ModelSerializer):
 class PostVentaSerializer(serializers.Serializer):
 
     """
-    Fromato del body de la petición POST
+    Formato del body de la petición POST
 
     {
         "usuario": "Fede",
@@ -131,29 +131,19 @@ class PostVentaSerializer(serializers.Serializer):
     def create(self, validated_data):
         with transaction.atomic():
             lotes_cantidades = validated_data['lote_cantidad']
-
-            print('====================================')
-            print('====================================')
-            print('PostVentaSerializer create')
-            print('====================================')
-            print('====================================')
+            array_errores = []
 
             precio_total = 0
-            print('====================================')
-            print('validated_data', validated_data)
-            print('====================================')
-
-            print(lotes_cantidades)
-            print('====================================')
-            print('====================================')
-            print('PostVentaSerializer, for in ====>')
-            print('====================================')
-            print('====================================')
 
             for lote_cant in lotes_cantidades:
                 try:
                     Lote.objects.select_for_update().get(
                         id=lote_cant['lote'].id)
+
+                    if lote_cant['lote'].cantidad < lote_cant['cantidad']:
+                        array_errores.append("{}, no hay suficientes en stock para el pedido de {}".format(
+                            lote_cant['lote'], lote_cant['cantidad']))
+
                     precio_total = precio_total + \
                         float(lote_cant['lote'].precio_de_venta) * \
                         float(lote_cant['cantidad'])
@@ -162,6 +152,9 @@ class PostVentaSerializer(serializers.Serializer):
                 except Lote.DoesNotExist:
                     raise serializers.ValidationError(
                         "Error al restar cantidad del lote.")
+
+            if len(array_errores) > 0:
+                raise ValueError('{}'.format(array_errores))
 
             print(validated_data)
             venta = Venta.objects.create(
@@ -180,8 +173,8 @@ class PostVentaSerializer(serializers.Serializer):
                     Lote.objects.get(id=lote['lote'].id).restar_cantidad(
                         lote['cantidad'])
 
-                except ValueError:
-                    raise
+                except ValueError as e:
+                    raise ValueError(str(e))
 
                 # lote.restar_cantidad(lote['cantidad'])
         # TODO: devolver con el siguiente formato

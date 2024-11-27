@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator
 from django_prometheus.models import ExportModelOperationsMixin
 import decimal
+
 # Create your models here.
 
 
@@ -48,13 +49,13 @@ class Lote(ExportModelOperationsMixin('lote'), models.Model):
             raise ValueError("La cantidad debe ser positiva")
         if cantidad > self.cantidad:
             raise ValueError(
-                "La cantidad a restar no puede ser mayor a la cantidad disponible")
+                'No hay suficientes "{}" en stock. El total actualmente es {}'.format(self.producto.descripcion, self.cantidad))
 
         self.cantidad -= cantidad
         self.save()
 
     def __str__(self):
-        return "{0} / cantidad {1} / comprado a: ${2}".format(self.proveedor, self.cantidad, self.precio_de_compra)
+        return "{0} {1}: cantidad en stock {2}".format(self.producto.descripcion, self.proveedor, self.cantidad)
 
 
 class Venta(ExportModelOperationsMixin('venta'), models.Model):
