@@ -42,13 +42,14 @@ class LoteProductoSerializer(serializers.ModelSerializer):
     codigo_de_barra = serializers.IntegerField(source="codigo_barra")
     stock = serializers.IntegerField(source="cantidad")
     proveedor = serializers.CharField(source="proveedor.nombre")
+    precio_de_lista = serializers.CharField(source="precio_de_compra")
 
     class Meta:
         model = Lote
         fields = (
             "id",
             "codigo_de_barra",
-            "precio_de_compra",
+            "precio_de_lista",
             "stock",
             "precio_bonificado",
             "ultimo_precio",
