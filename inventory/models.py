@@ -7,7 +7,7 @@ import decimal
 # Create your models here.
 
 
-class Proveedor(ExportModelOperationsMixin('proveedor'), models.Model):
+class Proveedor(ExportModelOperationsMixin("proveedor"), models.Model):
     nombre = models.CharField(max_length=250, unique=True)
     url = models.CharField(max_length=250, unique=True)
 
@@ -15,7 +15,7 @@ class Proveedor(ExportModelOperationsMixin('proveedor'), models.Model):
         return self.nombre
 
 
-class Producto(ExportModelOperationsMixin('producto'), models.Model):
+class Producto(ExportModelOperationsMixin("producto"), models.Model):
     descripcion = models.CharField(max_length=250)
     codigo_del_local = models.CharField(max_length=100, unique=True)
     modelo = models.CharField(max_length=100)
@@ -25,23 +25,34 @@ class Producto(ExportModelOperationsMixin('producto'), models.Model):
         return "{0} / {1} / {2}".format(self.codigo_del_local, self.modelo, self.marca)
 
 
-class Lote(ExportModelOperationsMixin('lote'), models.Model):
+class Lote(ExportModelOperationsMixin("lote"), models.Model):
     codigo_barra = models.CharField(max_length=100)
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_compra = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2)
+        max_digits=12,
+        validators=[MinValueValidator(decimal.Decimal("0.00"))],
+        decimal_places=2,
+    )
     precio_bonificado = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2, null=True)
-    ultimo_precio = models.DecimalField(
-        max_digits=12, decimal_places=2, null=True)
+        max_digits=12,
+        validators=[MinValueValidator(decimal.Decimal("0.00"))],
+        decimal_places=2,
+        null=True,
+    )
+    ultimo_precio = models.DecimalField(max_digits=12, decimal_places=2, null=True)
     proveedor = models.ForeignKey(Proveedor, on_delete=models.CASCADE)
     cantidad = models.PositiveIntegerField(
-        validators=[MinValueValidator(0)], null=False)
+        validators=[MinValueValidator(0)], null=False
+    )
     precio_de_venta = models.DecimalField(
-        max_digits=12, validators=[MinValueValidator(decimal.Decimal("0.00"))], decimal_places=2)
+        max_digits=12,
+        validators=[MinValueValidator(decimal.Decimal("0.00"))],
+        decimal_places=2,
+    )
     iva = models.DecimalField(max_digits=12, decimal_places=2, null=True)
     producto = models.ForeignKey(
-        Producto, on_delete=models.CASCADE, default='0')
+        Producto, related_name="lote", on_delete=models.CASCADE, default="0"
+    )
 
     def restar_cantidad(self, cantidad):
         """Reduce la cantidad disponible del lote."""
@@ -49,31 +60,44 @@ class Lote(ExportModelOperationsMixin('lote'), models.Model):
             raise ValueError("La cantidad debe ser positiva")
         if cantidad > self.cantidad:
             raise ValueError(
-                'No hay suficientes "{}" en stock. El total actualmente es {}'.format(self.producto.descripcion, self.cantidad))
+                'No hay suficientes "{}" en stock. El total actualmente es {}'.format(
+                    self.producto.descripcion, self.cantidad
+                )
+            )
 
         self.cantidad -= cantidad
         self.save()
 
     def __str__(self):
-        return "{0} {1}: cantidad en stock {2}".format(self.producto.descripcion, self.proveedor, self.cantidad)
+        return "{0} {1}: cantidad en stock {2}".format(
+            self.producto.descripcion, self.proveedor, self.cantidad
+        )
 
 
-class Venta(ExportModelOperationsMixin('venta'), models.Model):
+class Venta(ExportModelOperationsMixin("venta"), models.Model):
     usuario = models.CharField(max_length=40, default="Empleado 1")
     fecha = models.DateTimeField(default=timezone.now)
     precio_de_venta_total = models.DecimalField(
-        max_digits=12, decimal_places=2, validators=[MinValueValidator(decimal.Decimal("0.00"))], null=True, blank=True)
-    lotes = models.ManyToManyField(
-        Lote, through="Tabla_intermedia_venta")
+        max_digits=12,
+        decimal_places=2,
+        validators=[MinValueValidator(decimal.Decimal("0.00"))],
+        null=True,
+        blank=True,
+    )
+    lotes = models.ManyToManyField(Lote, through="Tabla_intermedia_venta")
 
     class Meta:
         ordering = ["fecha"]
 
     def _str_(self):
-        return "{0}/{1}/{2}/{3}".format(self.usuario, self.fecha, self.lotes, self.precio_de_venta_total)
+        return "{0}/{1}/{2}/{3}".format(
+            self.usuario, self.fecha, self.lotes, self.precio_de_venta_total
+        )
 
 
-class Tabla_intermedia_venta(ExportModelOperationsMixin('tabla_intermedia_venta'), models.Model):
+class Tabla_intermedia_venta(
+    ExportModelOperationsMixin("tabla_intermedia_venta"), models.Model
+):
     cantidad = models.PositiveIntegerField(default=0)
     venta = models.ForeignKey(Venta, on_delete=models.CASCADE)
     lote = models.ForeignKey(Lote, on_delete=models.CASCADE)
