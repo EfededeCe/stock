@@ -105,11 +105,24 @@ class LoteView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class BusquedaProductoLoteView(viewsets.ViewSet):
+class BusquedaProductoLoteView(viewsets.ModelViewSet):
     authentication_classes = [SessionAuthentication, BasicAuthentication]
     permission_classes = [IsAuthenticated]
+    serializer_class = LoteProductoSerializer
+    queryset = Lote.objects.none()  # Inicialmente vacío, se sobrescribe en list
 
-    def list(self, request):
+    def get_queryset(self):
+        query = self.request.query_params.get("q", "")
+
+        if not query:
+            return Lote.objects.none()
+
+        # Buscar lotes que coincidan con el código de barra o cuyo producto tenga el código del local
+        return Lote.objects.filter(
+            Q(codigo_barra__icontains=query) | Q(producto__codigo_del_local__icontains=query) | Q(producto__descripcion__icontains=query) | Q(producto__marca__icontains=query)
+        ).exclude(cantidad__lte=0)
+
+    def list(self, request, *args, **kwargs):
         query = request.query_params.get("q", "")
 
         if not query:
@@ -120,12 +133,15 @@ class BusquedaProductoLoteView(viewsets.ViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Buscar lotes que coincidan con el código de barra o cuyo producto tenga el código del local
-        lotes = Lote.objects.filter(
-            Q(codigo_barra__icontains=query) | Q(producto__codigo_del_local__icontains=query) | Q(producto__descripcion__icontains=query) | Q(producto__marca__icontains=query)
-        ).exclude(cantidad__lte=0)
+        queryset = self.get_queryset()
 
-        serializer = LoteProductoSerializer(lotes, many=True)
+        # Usar la paginación integrada
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
