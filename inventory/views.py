@@ -3,6 +3,7 @@ from .models import Proveedor, Producto, Lote, Venta, Tabla_intermedia_venta
 
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
+from django.db.models import Q
 
 # Autenticación
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
@@ -99,6 +100,30 @@ class LoteView(viewsets.ModelViewSet):
         if page is not None:
             serializer = LoteProductoSerializer(page, many=True)
             return self.get_paginated_response(serializer.data)
+
+        serializer = LoteProductoSerializer(lotes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BusquedaProductoLoteView(viewsets.ViewSet):
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        query = request.query_params.get("q", "")
+
+        if not query:
+            return Response(
+                {
+                    "error": "Debe proporcionar un término de búsqueda con el parámetro 'q'"
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Buscar lotes que coincidan con el código de barra o cuyo producto tenga el código del local
+        lotes = Lote.objects.filter(
+            Q(codigo_barra__icontains=query) | Q(producto__codigo_del_local__icontains=query) | Q(producto__descripcion__icontains=query) | Q(producto__marca__icontains=query)
+        ).exclude(cantidad__lte=0)
 
         serializer = LoteProductoSerializer(lotes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
