@@ -40,6 +40,7 @@ class LoteProductoSerializer(serializers.ModelSerializer):
     marca = serializers.CharField(source="producto.marca")
     producto_id = serializers.IntegerField(source="producto.id")
     codigo_de_barra = serializers.IntegerField(source="codigo_barra")
+    lote = serializers.IntegerField(source="id")
     stock = serializers.IntegerField(source="cantidad")
     proveedor = serializers.CharField(source="proveedor.nombre")
     precio_de_lista = serializers.CharField(source="precio_de_compra")
