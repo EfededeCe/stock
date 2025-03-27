@@ -47,7 +47,7 @@ class LoteProductoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lote
         fields = (
-            "id",
+            "lote",
             "codigo_de_barra",
             "precio_de_lista",
             "stock",
