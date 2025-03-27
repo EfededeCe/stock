@@ -61,6 +61,7 @@ class ProductoIDDescView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ProductoIDDescSerializer
     queryset = Producto.objects.all()
+    pagination_class = None
 
 
 class ProductoIDCodigoView(viewsets.ModelViewSet):
@@ -82,6 +83,7 @@ class ProveedorIDNombreView(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = ProveedorIDNombreSerializer
     queryset = Proveedor.objects.all()
+    pagination_class = None
 
 
 class LoteView(viewsets.ModelViewSet):
